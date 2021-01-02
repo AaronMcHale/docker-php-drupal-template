@@ -4,4 +4,4 @@ FROM nginx:alpine
 COPY "nginx.conf" "/etc/nginx/"
 COPY "snippets/php-fpm.conf" "/etc/nginx/snippets/"
 COPY "snippets/drupal.conf" "/etc/nginx/snippets/"
-COPY "conf.d/default-site.conf" "/etc/nginx/conf.d/"
+COPY "conf.d/default.conf" "/etc/nginx/conf.d/"
