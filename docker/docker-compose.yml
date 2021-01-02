@@ -33,12 +33,9 @@ services:
     tmpfs:
       - /tmp
       - /root/.composer
-    expose:
-      - "9000"
     networks:
       - web
     read_only: true
-    working_dir: /var/www/app
     restart: on-failure
 
 networks:
