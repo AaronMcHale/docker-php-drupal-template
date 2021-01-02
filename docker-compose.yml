@@ -1,1 +1,29 @@
+# This is the base docker-compose file which runs across all environments
+# it is supplemented by environment specific compose files.
+
 version: "3.8"
+
+services:
+
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: 'Dockerfile'
+    volumes:
+      - ./log/nginx:/var/log/nginx:rw
+      - ./app:/var/www/app:ro
+    tmpfs:
+      - /tmp
+      - /run
+    ports:
+      - 80:80
+    depends_on:
+      - php-fpm
+    networks:
+      - web
+    read_only: true
+    restart: on-failure
+
+networks:
+  web:
+    driver: bridge
