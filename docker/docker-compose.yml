@@ -11,7 +11,7 @@ services:
       dockerfile: 'Dockerfile'
     volumes:
       - ../log/nginx:/var/log/nginx:rw
-      - ./app:/var/www/app:ro
+      - ../app:/var/www/app:ro
     tmpfs:
       - /tmp
       - /run
@@ -29,7 +29,7 @@ services:
       context: ./php-fpm
       dockerfile: "Dockerfile"
     volumes:
-      - ./app:/var/www/app:rw
+      - ../app:/var/www/app:rw
     tmpfs:
       - /tmp
       - /root/.composer
