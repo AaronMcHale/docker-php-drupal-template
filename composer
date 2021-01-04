@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 # Script to execute composer inside a Docker container
 
-# We'll append all of the arguments that we'll pass to `docker run` in this variable.
-# Start by giving the container a name, and tell Docker to remove it from the list
+# We'll append all of the arguments that we'll pass to `docker run` in this
+# `docker_args` variable. Start by telling Docker to remove it from the list
 # once we're done with it.
-docker_args="--name=crm_php_composer --rm"
+docker_args="--rm"
 
 # We need the user to be able to fully interact with Composer running in the container
 # - Tell docker to take over Standard In, Out and Error
