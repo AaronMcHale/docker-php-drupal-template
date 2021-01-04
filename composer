@@ -13,23 +13,21 @@ docker_args="--name=crm_php_composer --rm"
 # - Proxy any signals to Composer, e.g. if the user terminates the process
 docker_args="$docker_args --attach STDIN --attach STDOUT --attach STDERR --interactive --tty --sig-proxy=true"
 
-# Create temporary file systems `/tmp`
-# This is where Composer writes all of its cache files to. Usually Composer will run
-# with a non-root user ID (see below for more detail), in an ideal scenario, the
-# `$COMPOSER_HOME` directory would be mounted as a persistent (unnamed) volume so that
-# cache data persisted between reboots, however during testing this probed problematic
-# as the volume would always be mounted as root with read-only permissions for "other",
-# as such and non-root users were unable to write to the `/.composer` volume.
-# Additionally, because we can't guarantee that the container and Composer
-# will always be run with a the same User ID every time, we don't want to cause file
-# permissions issues where Composer can't write to the cache.
-docker_args="$docker_args --tmpfs /tmp"
-
-# Mount rootfs as read-only
+# Mount rootfs as read-only to help ensure the integrity of the container.
 docker_args="$docker_args --read-only"
 
+# Mount the Composer Home from the host system into the container, this way the
+# container can write to a central cache which persists and can be reused across
+# different projects. Use the `$COMPOSER_HOME` environment variable or default to
+# `$HOME/.composer` if not set.
+COMPOSER_HOME=${COMPOSER_HOME:-$HOME/.composer}
+docker_args="$docker_args --volume $COMPOSER_HOME:/tmp"
+echo "Mounting $COMPOSER_HOME for cache."
+# Alternatively, a temp filesystem can be used, however this doesn't persist.
+#docker_args="$docker_args --tmpfs /tmp"
+
 # Mount the `app` directory as a volume and set the working directory to this path
-docker_args="$docker_args --volume=$PWD/app:/app --workdir=/app"
+docker_args="$docker_args --volume $PWD/app:/app --workdir=/app"
 
 # Get the user and group IDs of the current user, we then pass these to the Docker
 # Container, which runs using these, thus when Composer running inside the container
