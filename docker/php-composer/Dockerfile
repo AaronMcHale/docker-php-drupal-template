@@ -29,6 +29,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY --from=composer:2 /docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
+# Use /tmp for storing Composer Cache files
+ENV COMPOSER_HOME /tmp
+
 # The default command, this will usually be overriden at runtime by whatever composer
 # sub-command the user wants to run.
 CMD [ "composer" ]

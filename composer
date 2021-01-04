@@ -13,17 +13,17 @@ docker_args="--name=crm_php_composer --rm"
 # - Proxy any signals to Composer, e.g. if the user terminates the process
 docker_args="$docker_args --attach STDIN --attach STDOUT --attach STDERR --interactive --tty --sig-proxy=true"
 
-# Create temporary file systems, `/tmp` for good measure, and `/.composer` as this
-# is where Composer writes all of its cache files to. Usually Composer will run with
-# a non-root user ID (see below for more detail), in an ideal scenario, the
-# `/.composer` directory would be mounted as a persistent (unnamed) volume so that
+# Create temporary file systems `/tmp`
+# This is where Composer writes all of its cache files to. Usually Composer will run
+# with a non-root user ID (see below for more detail), in an ideal scenario, the
+# `$COMPOSER_HOME` directory would be mounted as a persistent (unnamed) volume so that
 # cache data persisted between reboots, however during testing this probed problematic
 # as the volume would always be mounted as root with read-only permissions for "other",
 # as such and non-root users were unable to write to the `/.composer` volume.
 # Additionally, because we can't guarantee that the container and Composer
 # will always be run with a the same User ID every time, we don't want to cause file
 # permissions issues where Composer can't write to the cache.
-docker_args="$docker_args --tmpfs /tmp --tmpfs /.composer"
+docker_args="$docker_args --tmpfs /tmp"
 
 # Mount rootfs as read-only
 docker_args="$docker_args --read-only"
