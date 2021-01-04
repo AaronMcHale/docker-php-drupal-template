@@ -10,8 +10,24 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions gd
 
+# Install dependencies that are required by Composer, the entrypoint script, or are
+# generally used during normal operations.
+# - tini: used by entrypoint.sh
+# - git openssh: for pulling Composer repos using Git
+# - zip unzip: for packing/unpacking Composer packages that use zip
+# - patch: if we need to have Composer patch some of the codebase using patch files
+RUN apk add --no-cache \
+  tini \
+  git openssh-client \
+  zip unzip \
+  patch
+
 # Copy the Composer binary from the Composer image on Docker Hub
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Also copy Composer Entry Point script from image and use that
+COPY --from=composer:2 /docker-entrypoint.sh /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # The default command, this will usually be overriden at runtime by whatever composer
 # sub-command the user wants to run.

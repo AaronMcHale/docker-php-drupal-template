@@ -41,11 +41,8 @@ user_id=$(id -u)
 group_id=$(id -g)
 docker_args="$docker_args --user=$user_id:$group_id"
 
-# Set the command which will be run, `$*` allows us to pass in all of the parameters
-# that were passed to this script, this way we can just forward them onto the
-# Composer command.
-composer_cmd="composer $*"
-
-# Run the docker container, use the "crm_php_composer" image which must be built
+# Run the Docker container, use the "crm_php_composer" image which must be built
 # before running this container, and passing in the various arguments we defined above
-docker run $docker_args crm_php_composer $composer_cmd
+# `$*` allows us to pass in all of the parameters that were passed to this script,
+# this way we can just forward them onto the Composer command.
+docker run $docker_args crm_php_composer $*
