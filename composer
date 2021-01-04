@@ -1,0 +1,51 @@
+#!/usr/bin/env sh
+# Script to execute composer inside a Docker container
+
+# We'll append all of the arguments that we'll pass to `docker run` in this variable.
+# Start by giving the container a name, and tell Docker to remove it from the list
+# once we're done with it.
+docker_args="--name=crm_php_composer --rm"
+
+# We need the user to be able to fully interact with Composer running in the container
+# - Tell docker to take over Standard In, Out and Error
+# - Run in interactive mode
+# - Attach to the active terminal
+# - Proxy any signals to Composer, e.g. if the user terminates the process
+docker_args="$docker_args --attach STDIN --attach STDOUT --attach STDERR --interactive --tty --sig-proxy=true"
+
+# Create temporary file systems, `/tmp` for good measure, and `/.composer` as this
+# is where Composer writes all of its cache files to. Usually Composer will run with
+# a non-root user ID (see below for more detail), in an ideal scenario, the
+# `/.composer` directory would be mounted as a persistent (unnamed) volume so that
+# cache data persisted between reboots, however during testing this probed problematic
+# as the volume would always be mounted as root with read-only permissions for "other",
+# as such and non-root users were unable to write to the `/.composer` volume.
+# Additionally, because we can't guarantee that the container and Composer
+# will always be run with a the same User ID every time, we don't want to cause file
+# permissions issues where Composer can't write to the cache.
+docker_args="$docker_args --tmpfs /tmp --tmpfs /.composer"
+
+# Mount rootfs as read-only
+docker_args="$docker_args --read-only"
+
+# Mount the `app` directory as a volume and set the working directory to this path
+docker_args="$docker_args --volume=$PWD/app:/app --workdir=/app"
+
+# Get the user and group IDs of the current user, we then pass these to the Docker
+# Container, which runs using these, thus when Composer running inside the container
+# writes to the filesystem it uses the same user and group IDs as the current user.
+# This is important on a development environment, where we don't want file permission
+# conflicts to start occurring, and since Composer would usually only be run in
+# the development environment, this is the most optimal behaviour.
+user_id=$(id -u)
+group_id=$(id -g)
+docker_args="$docker_args --user=$user_id:$group_id"
+
+# Set the command which will be run, `$*` allows us to pass in all of the parameters
+# that were passed to this script, this way we can just forward them onto the
+# Composer command.
+composer_cmd="composer $*"
+
+# Run the docker container, use the "crm_php_composer" image which must be built
+# before running this container, and passing in the various arguments we defined above
+docker run $docker_args crm_php_composer $composer_cmd
