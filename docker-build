@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+docker build -t "crm_php_composer" "./docker/php-composer"
+cd docker
+docker-compose --project-name crm up -d --build
