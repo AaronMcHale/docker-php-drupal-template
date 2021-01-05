@@ -27,7 +27,10 @@ echo "Mounting $COMPOSER_HOME for cache."
 #docker_args="$docker_args --tmpfs /tmp"
 
 # Mount the `app` directory as a volume and set the working directory to this path
-docker_args="$docker_args --volume $PWD/app:/app --workdir=/app"
+# We use the `$COMPOSER_APP_DIR` environment variable (which is not a Composer thing)
+# as our Docker test script uses this.
+COMPOSER_APP_DIR=${COMPOSER_APP_DIR:-$PWD/app}
+docker_args="$docker_args --volume $COMPOSER_APP_DIR:/app --workdir=/app"
 
 # Get the user and group IDs of the current user, we then pass these to the Docker
 # Container, which runs using these, thus when Composer running inside the container
@@ -43,4 +46,5 @@ docker_args="$docker_args --user=$user_id:$group_id"
 # before running this container, and passing in the various arguments we defined above
 # `$*` allows us to pass in all of the parameters that were passed to this script,
 # this way we can just forward them onto the Composer command.
-docker run $docker_args crm_php_composer $*
+COMPOSER_CONTAINER_NAME=${COMPOSER_CONTAINER_NAME:-crm_php_composer}
+docker run $docker_args "$COMPOSER_CONTAINER_NAME" $*
