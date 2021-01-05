@@ -12,15 +12,10 @@ services:
     volumes:
       - ../log/nginx:/var/log/nginx:rw
       - ../app:/var/www/app:ro
-    tmpfs:
-      - /tmp
-      - /run
-    ports:
-      - 80:80
-    depends_on:
-      - php-fpm
-    networks:
-      - web
+    tmpfs: [ /tmp ]
+    ports: [ 80:80 ]
+    depends_on: [ php-fpm ]
+    networks: [ web ]
     read_only: true
     restart: on-failure
 
@@ -28,13 +23,8 @@ services:
     build:
       context: ./php-fpm
       dockerfile: "Dockerfile"
-    volumes:
-      - ../app:/var/www/app:rw
-    tmpfs:
-      - /tmp
-      - /root/.composer
-    networks:
-      - web
+    volumes: [ ../app:/var/www/app:rw ]
+    networks: [ web ]
     read_only: true
     restart: on-failure
 
