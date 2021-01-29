@@ -1,6 +1,14 @@
 #!/usr/bin/env sh
 # Script to execute composer inside a Docker container
 
+# Ensure we are in the project root directory. This still allows the script
+# to work even if we call it from a different directory in or out of the
+# project.
+cd "${0%/*}"
+
+# Get the directory name of this directory, use that as the project name.
+project_name="${PWD##*/}"
+
 # We'll append all of the arguments that we'll pass to `docker run` in this
 # `docker_args` variable. Start by telling Docker to remove it from the list
 # once we're done with it.
@@ -42,9 +50,9 @@ user_id=$(id -u)
 group_id=$(id -g)
 docker_args="$docker_args --user=$user_id:$group_id"
 
-# Run the Docker container, use the "crm_php_composer" image which must be built
-# before running this container, and passing in the various arguments we defined above
+# Run the Docker container, use the image which must be built when running
+# `./docker-build`, and passing in the various arguments we defined above.
 # `$*` allows us to pass in all of the parameters that were passed to this script,
 # this way we can just forward them onto the Composer command.
-COMPOSER_CONTAINER_NAME=${COMPOSER_CONTAINER_NAME:-crm_php_composer}
+COMPOSER_CONTAINER_NAME=${COMPOSER_CONTAINER_NAME:-"${project_name}_composer"}
 docker run $docker_args "$COMPOSER_CONTAINER_NAME" $*
