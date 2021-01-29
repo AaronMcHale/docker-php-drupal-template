@@ -12,8 +12,8 @@ cd "${0%/*}"
 # where we were.
 tPWD="$PWD"; cd ..; project_name="${PWD##*/}"; cd "$tPWD"
 
-# Build the PHP Composer contianer
+# Build the PHP Composer image
 docker build -t "${project_name}_composer" "./php-composer"
 
-# Build the Docker Compose containers
+# Build the Docker Compose images
 docker-compose --project-name "$project_name" build
