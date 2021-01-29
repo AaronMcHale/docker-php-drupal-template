@@ -51,7 +51,7 @@ group_id=$(id -g)
 docker_args="$docker_args --user=$user_id:$group_id"
 
 # Run the Docker container, use the image which must be built when running
-# `./docker-build`, and passing in the various arguments we defined above.
+# `./docker/build.sh`, and passing in the various arguments we defined above.
 # `$*` allows us to pass in all of the parameters that were passed to this script,
 # this way we can just forward them onto the Composer command.
 COMPOSER_CONTAINER_NAME=${COMPOSER_CONTAINER_NAME:-"${project_name}_composer"}
