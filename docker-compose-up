@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-cd docker
-docker-compose --project-name crm up -d
