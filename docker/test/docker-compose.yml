@@ -4,7 +4,7 @@ services:
 
   nginx:
     volumes:
-      - .test-temp/log/nginx:/var/log/nginx:rw
-      - .test-temp/app:/var/www/app:ro
+      - ./test/.test-temp/log/nginx:/var/log/nginx:rw
+      - ./test/.test-temp/app:/var/www/app:ro
   php-fpm:
-    volumes: [ .test-temp/app:/var/www/app:rw ]
+    volumes: [ ./test/.test-temp/app:/var/www/app:rw ]
