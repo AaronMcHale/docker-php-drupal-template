@@ -4,6 +4,18 @@
 # inside the containers, instead the `.test-temp` folder (adjacent to this script)
 # is used to store equivalent temporary mounted directories.
 
+# Ensure we are in the test directory that contains the relevant
+# files. This still allows the script to work even if we call it
+# from outside this directory.
+cd "${0%/*}"
+
+# Get the project name, which is the root directory name of this
+# project (we assume the root is one level up). This is a single
+# line way of doing it, essentially, cd up one dir, get the name
+# of that dir using shell Parameter Expansion, then cd back to
+# where we were.
+tPWD="$PWD"; cd ../..; project_name="${PWD##*/}-test"; cd "$tPWD"
+
 # Remove the `.test-temp` directory if it exists and create a clean one.
 if [ -d .test-temp ]; then
     rm -rf .test-temp
@@ -19,7 +31,7 @@ mkdir .test-temp/composer
 # We are using the Overrides method here: `-f ../docker-compose.yml`
 # is our main Compose file, then `-f docker-compose.yml` contains
 # test specific values which override values in our main Compose file
-compose_args="-f ../docker-compose.yml -f docker-compose.yml --project-name crm_test"
+compose_args="-f ../docker-compose.yml -f docker-compose.yml --project-name $project_name"
 
 docker_compose_cleanup()
 {
@@ -27,7 +39,7 @@ docker_compose_cleanup()
     docker-compose $compose_args stop
     docker-compose $compose_args kill
     docker-compose $compose_args rm --force -v
-    docker rmi --force "crm_php_composer_test"
+    docker rmi --force "${project_name}_composer"
     rm -rf .test-temp
     echo 'Done'
 }
@@ -44,7 +56,7 @@ if [ $? != 0 ]; then
 fi
 
 # Build the Composer image, don't use cache
-docker build -t "crm_php_composer_test" "../php-composer" --no-cache
+docker build -t "${project_name}_composer" "../php-composer" --no-cache
 if [ $? != 0 ]; then
     echo "Failed to build PHP Composer image, aborting."
     docker_compose_cleanup; exit 1
@@ -52,7 +64,7 @@ fi
 
 export COMPOSER_HOME=$PWD/.test-temp/composer
 export COMPOSER_APP_DIR=$PWD/.test-temp/app
-export COMPOSER_CONTAINER_NAME=crm_php_composer_test
+export COMPOSER_CONTAINER_NAME="${project_name}_composer"
 
 ../../composer create-project --no-interaction drupal/recommended-project .
 if [ $? != 0 ]; then
