@@ -24,6 +24,7 @@ services:
       context: ./php-fpm
       dockerfile: "Dockerfile"
     volumes: [ ../app:/var/www/app:rw ]
+    tmpfs: [ /tmp ]
     networks: [ web ]
     read_only: true
     restart: on-failure
