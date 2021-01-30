@@ -20,6 +20,19 @@ project_name="${PWD##*/}"
 # by default this is the image that is built when running `docker/build.sh`.
 COMPOSER_IMAGE_NAME=${COMPOSER_IMAGE_NAME:-"${project_name}_composer"}
 
+# Look to see if the image we will use exists in Docker. Gets a formatted
+# Docker image list, filtered by the image name we expect. If the image is
+# not in the image list `docker images` below should return nothing. Pipe
+# the output to grep to perform a count of the output from `docker images`.
+# Under normal circumstances `$img_check` will be either 0 or 1.
+# Using grep to count is safer than a simple equals check with `[`/`test`,
+# this avoids any pesky whitespace that may or may not be in the `docker
+# images` output causing false results.
+img_check=$(docker images "$COMPOSER_IMAGE_NAME" --format "{{.Repository}}" | grep -ic "$COMPOSER_IMAGE_NAME" )
+if [ "$img_check" -le 0 ]; then
+    echo "Error: unable to find Docker Image $COMPOSER_IMAGE_NAME, try running build.sh in the docker directory of this project. Aborting."; exit 1
+fi
+
 # We'll append all of the arguments that we'll pass to `docker run` in this
 # `docker_args` variable. Start by telling Docker to remove it from the list
 # once we're done with it.
