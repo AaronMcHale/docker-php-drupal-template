@@ -64,7 +64,7 @@ fi
 
 export COMPOSER_HOME=$PWD/.test-temp/composer
 export COMPOSER_APP_DIR=$PWD/.test-temp/app
-export COMPOSER_CONTAINER_NAME="${project_name}_composer"
+export COMPOSER_IMAGE_NAME="${project_name}_composer"
 
 ../../composer create-project --no-interaction drupal/recommended-project .
 if [ $? != 0 ]; then

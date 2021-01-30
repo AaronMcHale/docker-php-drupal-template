@@ -2,9 +2,9 @@
 # Script to execute composer inside a Docker container
 #
 # The following environment variables can be set to override specific values:
+# - COMPOSER_IMAGE_NAME
 # - COMPOSER_HOME
 # - COMPOSER_APP_DIR
-# - COMPOSER_CONTAINER_NAME
 # See comments below for documentation on how these work.
 
 # Ensure we are in the project root directory. This still allows the script
@@ -14,6 +14,11 @@ cd "${0%/*}"
 
 # Get the directory name of this directory, use that as the project name.
 project_name="${PWD##*/}"
+
+# COMPOSER_IMAGE_NAME environment variable.
+# Specifies what the name of the Composer Docker Image is that we should use
+# by default this is the image that is built when running `docker/build.sh`.
+COMPOSER_IMAGE_NAME=${COMPOSER_IMAGE_NAME:-"${project_name}_composer"}
 
 # We'll append all of the arguments that we'll pass to `docker run` in this
 # `docker_args` variable. Start by telling Docker to remove it from the list
@@ -56,9 +61,7 @@ user_id=$(id -u)
 group_id=$(id -g)
 docker_args="$docker_args --user=$user_id:$group_id"
 
-# Run the Docker container, use the image which must be built when running
-# `./docker/build.sh`, and passing in the various arguments we defined above.
+# Run the Docker container, passing in the various arguments we defined above.
 # `$*` allows us to pass in all of the parameters that were passed to this script,
 # this way we can just forward them onto the Composer command.
-COMPOSER_CONTAINER_NAME=${COMPOSER_CONTAINER_NAME:-"${project_name}_composer"}
-docker run $docker_args "$COMPOSER_CONTAINER_NAME" $*
+docker run $docker_args "$COMPOSER_IMAGE_NAME" $*
