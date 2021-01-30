@@ -16,3 +16,12 @@ Run `docker/build.sh` to build the Docker images, you will need to run this on:
 Run `docker/compose-up.sh` to start the containers that run in Docker Compose (e.g. Nginx, PHP-FPM, etc).
 
 It is encouraged and sometimes necessary to customise any and all of the Dockerfiles, Compose files and configuration shipped with this template.
+
+## Key files and directories
+
+* `docker/`: Stores files for building and running the Docker Images and Containers, e.g. docker-compose files, Dockerfiles, Nginx configuration, etc.
+* `composer`: Executable shell script to run PHP Composer in a Container, any arguments/params passed to the script will be forwarded to Composer running inside the container. Treat it as a regular Composer PHAR, e.g. `./composer require ...` will work as expected, however note that (for now) Composer itself will not be aware of what directory you are in and will always run from the top level of the `app/` directory.
+* `app/`: Where the PHP/Drupal app lives, where you'll find `composer.json`, `vender/` and `web/`. Mounted inside most containers, and Composer will use this as the app root when executing.
+* `app/web/`: Assuming this is a standard Drupal or Symfony app, the Drupal HTTP web root, where you'll find `modules/`, `themes/`, etc.
+* `.gitignore`: Customise this as you see fit, it ships with some sensible defaults.
+* `.editorconfig` and `.gitattributes`: The Drupal-shipped versions.
