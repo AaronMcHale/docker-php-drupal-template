@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 # Script to execute composer inside a Docker container
+#
+# The following environment variables can be set to override specific values:
+# - COMPOSER_HOME
+# - COMPOSER_APP_DIR
+# - COMPOSER_CONTAINER_NAME
+# See comments below for documentation on how these work.
 
 # Ensure we are in the project root directory. This still allows the script
 # to work even if we call it from a different directory in or out of the
