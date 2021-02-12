@@ -29,6 +29,18 @@ services:
     read_only: true
     restart: on-failure
 
+  php-cron:
+    build:
+      context: ./php-cron
+      dockerfile: "Dockerfile"
+    volumes:
+      - ../log/cron:/var/log:rw
+      - ../app:/var/www/app:rw
+    tmpfs: [ /tmp ]
+    networks: [ web ]
+    read_only: true
+    restart: on-failure
+
 networks:
   web:
     driver: bridge
