@@ -6,6 +6,8 @@ This template project is designed to provide a quick start approach to getting s
 
 This template is not just for the development process, it is being architected in a way which supports a project moving through multiple environments: from dev, through test and eventually to the live production environment.
 
+When you use this template, you're first instinct will be to scrap this README file, however it has some useful info, so consider building on it instead of replacing it :)
+
 ## First run and usage
 
 Run `docker/build.sh` to build the Docker images, you will need to run this on:
