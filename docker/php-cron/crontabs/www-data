@@ -1,0 +1,6 @@
+# Cron tasks in this file will be run as the www-data user
+#
+# min   hour    day     month   weekday command
+
+# Run Drupal Cron using specially written PHP script
+*/5    *       *       *       *       /drupal-cron-run.php

@@ -10,6 +10,13 @@ RUN install-php-extensions gd
 # Use the default dev configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
+# Copy Crontab files into the image
+COPY crontabs/www-data /etc/crontabs
+
+# Copy the specially written Drupal Cron PHP script into the iamge
+COPY drupal-cron-run.php /
+RUN chmod +x /drupal-cron-run.php
+
 WORKDIR "/var/www/app"
 
 CMD ["crond", "-f"]
