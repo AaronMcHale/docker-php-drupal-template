@@ -5,7 +5,7 @@ FROM php:7.4-alpine
 # "mlocati/php-extension-installer" provides an easy way to install extensions
 # see https://github.com/mlocati/docker-php-extension-installer/blob/master/README.md
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions gd
+RUN install-php-extensions gd opcache
 
 # Use the default dev configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
