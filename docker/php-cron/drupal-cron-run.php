@@ -16,11 +16,17 @@ use Drupal\Core\DrupalKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 // @todo figure out path from environment maybe?
-$autoloader = require_once '/var/www/app/web/autoload.php';
+$app_root = '/var/www/app/web';
+
+// chdir to the app_root directory, ensures Drupal root-relative
+// paths can be resolved (otherwise SQLite connections fail).
+chdir($app_root);
+
+$autoloader = require_once 'autoload.php';
 
 // Initialise a Request and Kernel
 $request = Request::createFromGlobals();
-$kernel = DrupalKernel::createFromRequest($request, $autoloader, 'prod', '/var/www/app');
+$kernel = DrupalKernel::createFromRequest($request, $autoloader, 'prod');
 $kernel->boot();
 
   /** @var \Drupal\Core\CronInterface $cron */
