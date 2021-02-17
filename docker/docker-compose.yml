@@ -28,6 +28,7 @@ services:
     networks: [ web, db ]
     read_only: true
     restart: on-failure
+    user: www-data
 
   php-cron:
     build:
