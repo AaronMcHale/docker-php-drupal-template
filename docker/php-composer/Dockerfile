@@ -16,7 +16,7 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 # - git openssh: for pulling Composer repos using Git
 # - zip unzip: for packing/unpacking Composer packages that use zip
 # - patch: if we need to have Composer patch some of the codebase using patch files
-RUN set -e \
+RUN set -e; \
   apk add --no-cache \
   tini \
   git openssh-client \
