@@ -6,8 +6,15 @@ FROM php:7.4-fpm-alpine
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions gd opcache
 
-# Use the default dev configuration
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+RUN set -e; \
+  # Use the default dev configuration
+  mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"; \
+  # PHP-FPM logs to Standard Out/Error so turn off logging to Nginx FastCSG
+  { \
+    echo; \
+    echo "; Turn off FastCGI logging so that Nginx doesn't also log what we are already logging"; \
+    echo "php_admin_flag[fastcgi.logging] = off"; \
+  } | tee -a "$PHP_INI_DIR"/../php-fpm.d/docker.conf
 
 # Install Drush Launcher
 RUN set -e \
