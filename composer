@@ -7,6 +7,9 @@
 # - COMPOSER_APP_DIR
 # See comments below for documentation on how these work.
 
+# Exit this script if any exit with a non-zero state
+set -e
+
 # Ensure we are in the project root directory. This still allows the script
 # to work even if we call it from a different directory in or out of the
 # project.

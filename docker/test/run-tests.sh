@@ -7,14 +7,14 @@
 # Ensure we are in the test directory that contains the relevant
 # files. This still allows the script to work even if we call it
 # from outside this directory.
-cd "${0%/*}"
+cd "${0%/*}" || exit 1
 
 # Get the project name, which is the root directory name of this
 # project (we assume the root is one level up). This is a single
 # line way of doing it, essentially, cd up one dir, get the name
 # of that dir using shell Parameter Expansion, then cd back to
 # where we were.
-tPWD="$PWD"; cd ../..; project_name="${PWD##*/}-test"; cd "$tPWD"
+tPWD="$PWD"; cd ../.. || exit 1; project_name="${PWD##*/}-test"; cd "$tPWD" || exit 1
 
 # Remove the `.test-temp` directory if it exists and create a clean one.
 if [ -d .test-temp ]; then

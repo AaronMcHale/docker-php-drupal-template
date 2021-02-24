@@ -10,7 +10,8 @@ RUN install-php-extensions gd opcache
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Install Drush Launcher
-RUN cd /usr/local/bin; \
+RUN set -e \
+  cd /usr/local/bin; \
 	curl -o drush -OL https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar ;\
 	chmod +x drush
 

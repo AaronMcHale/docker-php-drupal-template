@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Exit this script if any exit with a non-zero state
+set -e
+
 # Ensure we are in the directory that contains the relevant docker
 # files. This still allows the script to work even if we call it
 # from outside the "docker" directory.
