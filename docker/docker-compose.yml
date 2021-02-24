@@ -13,7 +13,7 @@ services:
       - ../log/nginx:/var/log/nginx:rw
       - ../app:/var/www/app:ro
     tmpfs: [ /tmp ]
-    ports: [ 80:80 ]
+    ports: [ 80:8080 ]
     depends_on: [ php-fpm ]
     networks: [ web ]
     read_only: true
@@ -28,7 +28,6 @@ services:
     networks: [ web, db ]
     read_only: true
     restart: on-failure
-    user: www-data
 
   php-cron:
     build:
