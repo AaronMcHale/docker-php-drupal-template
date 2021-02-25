@@ -24,3 +24,4 @@ RUN set -e \
 
 WORKDIR "/var/www/app"
 EXPOSE 9000
+USER www-data
