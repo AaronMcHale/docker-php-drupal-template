@@ -9,6 +9,4 @@ services:
   php-fpm:
     volumes: [ ./test/.test-temp/app:/var/www/app:rw ]
   php-cron:
-    volumes:
-      - ./test/.test-temp/log/cron:/var/log:rw
-      - ./test/.test-temp/app:/var/www/app:ro
+    volumes: [ ./test/.test-temp/app:/var/www/app:ro ]

@@ -31,9 +31,7 @@ services:
     build:
       context: ./php-cron
       dockerfile: "Dockerfile"
-    volumes:
-      - ../log/cron:/var/log:rw
-      - ../app:/var/www/app:rw
+    volumes: [ ../app:/var/www/app:rw ]
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true
