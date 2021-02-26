@@ -1,0 +1,12 @@
+# Remaining tasks
+- PHP PDO MySQL extension
+- Documentation of docker directory and each image
+- Docker Bench Security related hardening
+- Nginx worker processes, should it be dynamic, how to deal with that
+- More Nginx hardening and configuration
+- SSL/TLS
+- Alpine/BusyBox Cron requires to be run as root
+    possibly use https://github.com/aptible/supercronic instead
+    maybe use different base image (Ubuntu maybe?)
+- Review PHP configuration and any hardening
+- MariaDB hardening
