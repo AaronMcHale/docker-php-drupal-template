@@ -1,5 +1,4 @@
 # Remaining tasks
-- PHP PDO MySQL extension
 - Documentation of docker directory and each image
 - Docker Bench Security related hardening
 - Nginx worker processes, should it be dynamic, how to deal with that
