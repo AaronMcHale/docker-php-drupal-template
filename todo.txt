@@ -8,3 +8,13 @@
     maybe use different base image (Ubuntu maybe?)
 - Review PHP configuration and any hardening
 - MariaDB hardening
+
+# Docker Bench Security hardening:
+- Ensure containers are restricted from acquiring new privileges
+- Ensure memory usage for container is limited: Container running without memory restrictions
+- Ensure CPU priority is set appropriately on the container: Container running without CPU restrictions
+- Ensure incoming container traffic is binded to a specific host interface: Port being bound to wildcard IP: 0.0.0.0 in docker-php-drupal-template_nginx_1
+- Ensure 'on-failure' container restart policy is set to '5': MaximumRetryCount is not set to 5
+- Ensure the container is restricted from acquiring additional privileges
+- Add health checks
+- Container PID limit
