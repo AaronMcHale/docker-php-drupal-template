@@ -1,5 +1,5 @@
 # Remaining tasks
-- Documentation of docker directory and each image
+> Documentation of docker directory and each image
 - Docker Bench Security related hardening
 - More Nginx hardening and configuration
 - SSL/TLS
