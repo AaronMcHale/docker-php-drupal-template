@@ -8,6 +8,7 @@
     maybe use different base image (Ubuntu maybe?)
 - Review PHP configuration and any hardening
 - MariaDB hardening
+- Update test script/images with latest additions
 
 # Docker Bench Security hardening:
 - Ensure containers are restricted from acquiring new privileges
