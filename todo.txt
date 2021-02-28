@@ -9,6 +9,8 @@
 - Review PHP configuration and any hardening
 - MariaDB hardening
 - Update test script/images with latest additions
+- License file? (probably)
+- Mailhog (for development)
 
 # Docker Bench Security hardening:
 - Ensure containers are restricted from acquiring new privileges
