@@ -1,5 +1,14 @@
 # Docker
 
+The following customised Docker Images are provided:
+* Nginx
+* Composer 2
+* Cron
+* PHP-FPM
+
+The following images are provided but have not been customised:
+* MariaDB
+
 ## Architectural rational and methodology
 
 Two of the main goals when architecting the containerised setup were that the setup should be reasonably secure but also simple enough to quickly understand what is going on.
