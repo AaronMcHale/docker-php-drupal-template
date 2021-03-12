@@ -27,3 +27,7 @@ It is encouraged and sometimes necessary to customise any and all of the Dockerf
 * `app/web/`: Assuming this is a standard Drupal or Symfony app, the Drupal HTTP web root, where you'll find `modules/`, `themes/`, etc.
 * `.gitignore`: Customise this as you see fit, it ships with some sensible defaults.
 * `.editorconfig` and `.gitattributes`: The Drupal-shipped versions.
+
+## Docker
+
+[Refer to the README.md in the docker directory for more details and documentation.](docker/README.md)
