@@ -13,6 +13,7 @@
 - License file? (probably)
 - Mailhog (for development)
 - PHP 8
+- Need a wrapper for running PHPUnit, similar to what we do with Composer
 
 # Docker Bench Security hardening:
 - Ensure containers are restricted from acquiring new privileges
