@@ -22,6 +22,6 @@ RUN set -e \
 	curl -o drush -OL https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar ;\
 	chmod +x drush
 
-WORKDIR "/var/www/app"
+WORKDIR "/app"
 EXPOSE 9000
 USER www-data

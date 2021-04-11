@@ -23,7 +23,7 @@ use Drupal\Core\DrupalKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 // @todo figure out path from environment maybe?
-$app_root = '/var/www/app/web';
+$app_root = '/app/web';
 
 if (!is_dir($app_root)) {
   fwrite($stderr, "Unable to run Drupal Cron: Expected path $app_root which does not exist in the Cron Container, aborting.\n");

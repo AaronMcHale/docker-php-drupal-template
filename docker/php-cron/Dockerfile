@@ -17,6 +17,6 @@ COPY crontabs/www-data /etc/crontabs
 COPY drupal-cron-run.php /
 RUN chmod +x /drupal-cron-run.php
 
-WORKDIR "/var/www/app"
+WORKDIR "/app"
 
 CMD ["crond", "-f"]
