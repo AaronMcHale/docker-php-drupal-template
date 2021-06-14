@@ -40,7 +40,7 @@ services:
   mariadb:
     image: mariadb
     volumes:
-      - ../db:/var/lib/mysql:rw
+      - db:/var/lib/mysql:rw
     tmpfs: [ /tmp, /run/mysqld ]
     networks: [ db ]
     environment:
@@ -53,3 +53,6 @@ networks:
     driver: bridge
   db:
     driver: bridge
+
+volumes:
+  db:
