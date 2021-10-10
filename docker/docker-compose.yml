@@ -10,7 +10,6 @@ services:
       context: ./nginx
       dockerfile: 'Dockerfile'
     volumes:
-      - ../vendor:/app/vendor:ro
       - ../web:/app/web:ro
     tmpfs: [ /tmp ]
     ports: [ 80:8080 ]
@@ -25,7 +24,9 @@ services:
       dockerfile: "Dockerfile"
     volumes:
       - ../vendor:/app/vendor:ro
-      - ../web:/app/web:ro
+      - ../web:/app/web:rw
+      - ../composer.json:/app/composer.json:ro
+      - ../composer.lock:/app/composer.lock:ro
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true
@@ -37,7 +38,9 @@ services:
       dockerfile: "Dockerfile"
     volumes:
       - ../vendor:/app/vendor:ro
-      - ../web:/app/web:ro
+      - ../web:/app/web:rw
+      - ../composer.json:/app/composer.json:ro
+      - ../composer.lock:/app/composer.lock:ro
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true
