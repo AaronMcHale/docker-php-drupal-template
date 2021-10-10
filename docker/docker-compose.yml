@@ -9,7 +9,9 @@ services:
     build:
       context: ./nginx
       dockerfile: 'Dockerfile'
-    volumes: [ ../app:/app:ro ]
+    volumes:
+      - ../vendor:/app/vendor:ro
+      - ../web:/app/web:ro
     tmpfs: [ /tmp ]
     ports: [ 80:8080 ]
     depends_on: [ php-fpm ]
@@ -21,7 +23,9 @@ services:
     build:
       context: ./php-fpm
       dockerfile: "Dockerfile"
-    volumes: [ ../app:/app:rw ]
+    volumes:
+      - ../vendor:/app/vendor:ro
+      - ../web:/app/web:ro
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true
@@ -31,7 +35,9 @@ services:
     build:
       context: ./php-cron
       dockerfile: "Dockerfile"
-    volumes: [ ../app:/app:rw ]
+    volumes:
+      - ../vendor:/app/vendor:ro
+      - ../web:/app/web:ro
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true

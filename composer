@@ -61,11 +61,17 @@ echo "Mounting $COMPOSER_HOME for cache."
 # Alternatively, a temp filesystem can be used, however this doesn't persist.
 #docker_args="$docker_args --tmpfs /tmp"
 
-# Mount the `app` directory as a volume and set the working directory to this path
-# We use the `$COMPOSER_APP_DIR` environment variable (which is not a Composer thing)
-# as our Docker test script uses this.
-COMPOSER_APP_DIR=${COMPOSER_APP_DIR:-$PWD/app}
-docker_args="$docker_args --volume $COMPOSER_APP_DIR:/app --workdir=/app"
+# Mount the project root directory as a volume and set the working directory to this
+# path. When running commands like `composer install`, mounting the whole project,
+# instead of just `vendor` and `web` means Composer can create those directories for
+# us. We use the `$COMPOSER_APP_DIR` environment variable (which is not a Composer
+# thing) as our Docker test script uses this.
+COMPOSER_APP_DIR=${COMPOSER_APP_DIR:-$PWD}
+docker_args="$docker_args --volume $COMPOSER_APP_DIR:/app"
+
+# Set the working directory to the `/app` directory that exists only inside the
+# image.
+docker_args="$docker_args --workdir=/app"
 
 # Get the user and group IDs of the current user, we then pass these to the Docker
 # Container, which runs using these, thus when Composer running inside the container

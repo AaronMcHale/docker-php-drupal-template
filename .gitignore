@@ -1,5 +1,7 @@
 # Gitignore
-# Modify this as required.
+#
+# Contains sensible defaults, this should be modified to suit your project
+# needs.
 
 # Ignore the .test-temp directory from the Docker test
 docker/test/.test-temp
@@ -8,13 +10,23 @@ docker/test/.test-temp
 # Entries from Drupal's example.gitignore, not everything has been included
 ###
 
+# Ignore core when managing all of a project's dependencies with Composer
+# including Drupal core.
+/web/core
+
+# Ignore dependencies that are managed with Composer.
+# Generally you should only ignore the root vendor directory. It's important
+# that core/assets/vendor and any other vendor directories within contrib or
+# custom module, theme, etc., are not ignored unless you purposely do so.
+/vendor/
+
 # Ignore configuration files that may contain sensitive information.
-app/web/sites/*/settings*.php
-app/web/sites/*/services*.yml
+/web/sites/*/settings*.php
+/web/sites/*/services*.yml
 
 # Ignore paths that contain user-generated content.
-app/web/sites/*/files
-app/web/sites/*/private
+/web/sites/*/files
+/web/sites/*/private
 
 # Ignore SimpleTest multi-site environment.
-app/web/sites/simpletest
+/web/sites/simpletest

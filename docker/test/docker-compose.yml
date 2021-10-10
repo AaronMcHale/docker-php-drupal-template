@@ -3,8 +3,14 @@ version: "3.8"
 services:
 
   nginx:
-    volumes: [ ./test/.test-temp/app:/app:ro ]
+    volumes:
+      - ./test/.test-temp/app/vendor:/app/vendor:ro
+      - ./test/.test-temp/app/web:/app/web:ro
   php-fpm:
-    volumes: [ ./test/.test-temp/app:/app:rw ]
+    volumes:
+      - ./test/.test-temp/app/vendor:/app/vendor:ro
+      - ./test/.test-temp/app/web:/app/web:ro
   php-cron:
-    volumes: [ ./test/.test-temp/app:/app:ro ]
+    volumes:
+      - ./test/.test-temp/app/vendor:/app/vendor:ro
+      - ./test/.test-temp/app/web:/app/web:ro
