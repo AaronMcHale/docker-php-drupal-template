@@ -1,5 +1,5 @@
 # Starting building the main image which will contain the Composer executable
-FROM php:7.4-alpine
+FROM php:8.0-alpine
 
 # Install additional PHP extensions which Drupal requires,
 # "mlocati/php-extension-installer" provides an easy way to install extensions
