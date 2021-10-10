@@ -4,6 +4,8 @@
 - More Nginx hardening and configuration
 - SSL/TLS
     Decide on version support, perhaps TLS 1.3 only with optional 1.2 support
+    Configure Perfect Forward Secrecy properly
+      https://www.thesslstore.com/blog/perfect-forward-secrecy-explained/
 - Alpine/BusyBox Cron requires to be run as root
     possibly use https://github.com/aptible/supercronic instead
     maybe use different base image (Ubuntu maybe?)
