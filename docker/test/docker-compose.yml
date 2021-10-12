@@ -8,12 +8,14 @@ services:
   php-fpm:
     volumes:
       - ./test/.test-temp/app/vendor:/app/vendor:ro
+      - ./test/.test-temp/app/private_files:/app/private_files:rw
       - ./test/.test-temp/app/web:/app/web:rw
       - ./test/.test-temp/app/composer.json:/app/composer.json:ro
       - ./test/.test-temp/app/composer.lock:/app/composer.lock:ro
   php-cron:
     volumes:
       - ./test/.test-temp/app/vendor:/app/vendor:ro
+      - ./test/.test-temp/app/private_files:/app/private_files:rw
       - ./test/.test-temp/app/web:/app/web:rw
       - ./test/.test-temp/app/composer.json:/app/composer.json:ro
       - ./test/.test-temp/app/composer.lock:/app/composer.lock:ro

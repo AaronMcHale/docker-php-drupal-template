@@ -24,6 +24,7 @@ services:
       dockerfile: "Dockerfile"
     volumes:
       - ../vendor:/app/vendor:ro
+      - ../private_files:/app/private_files:rw
       - ../web:/app/web:rw
       - ../composer.json:/app/composer.json:ro
       - ../composer.lock:/app/composer.lock:ro
@@ -38,6 +39,7 @@ services:
       dockerfile: "Dockerfile"
     volumes:
       - ../vendor:/app/vendor:ro
+      - ../private_files:/app/private_files:rw
       - ../web:/app/web:rw
       - ../composer.json:/app/composer.json:ro
       - ../composer.lock:/app/composer.lock:ro

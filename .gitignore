@@ -33,6 +33,8 @@ docker/test/.test-temp
 # Ignore paths that contain user-generated content.
 /web/sites/*/files
 /web/sites/*/private
+/private_files
+!/private_files/README.md
 
 # Ignore SimpleTest multi-site environment.
 /web/sites/simpletest
