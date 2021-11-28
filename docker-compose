@@ -4,6 +4,10 @@
 ## Any parameters passed to this script will be passed through to
 ## docker-compose, for example running `./docker-compose up -d` will
 ## result in the `up -d` being passed through to `docker-compose`.
+##
+## The following environment variables can be set to override specific values:
+## - DOCKER_COMPOSE_PROJECT_NAME
+## See comments below for documentation on how these work.
 
 ## Exit this script if any exit with a non-zero state
 set -e
@@ -15,6 +19,10 @@ cd "${0%/*}"
 
 ## Get the directory name of this directory, use that as the project name.
 project_name="${PWD##*/}"
+
+## DOCKER_COMPOSE_PROJECT_NAME environment variable.
+## Can be used to override the name of the Docker Compose project name.
+DOCKER_COMPOSE_PROJECT_NAME=${DOCKER_COMPOSE_PROJECT_NAME:-"$project_name"}
 
 ## Export keys and values defined in the `.env` file.
 if [ -f ".env" ]; then
@@ -28,5 +36,5 @@ cd "docker"
 ## Run `docker-compose` with the constructed arguments, and pass through
 ## any arguments/parameters passed to this script.
 docker-compose \
-  --project-name "$project_name" \
+  --project-name "$DOCKER_COMPOSE_PROJECT_NAME" \
   $@
