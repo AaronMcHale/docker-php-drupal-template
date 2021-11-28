@@ -18,6 +18,12 @@ cd "${0%/*}"
 # Get the directory name of this directory, use that as the project name.
 project_name="${PWD##*/}"
 
+## Export keys and values defined in the `.env` file.
+if [ -f ".env" ]; then
+  # Source the .env file but ignore comments
+  export $(grep -v '^#' .env | xargs)
+fi
+
 # COMPOSER_IMAGE_NAME environment variable.
 # Specifies what the name of the Composer Docker Image is that we should use
 # by default this is the image that is built when running `docker/build.sh`.
