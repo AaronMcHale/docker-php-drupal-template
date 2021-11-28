@@ -3,6 +3,9 @@
 # Contains sensible defaults, this should be modified to suit your project
 # needs.
 
+# Ignore the root .env file
+.env
+
 # Ignore the .test-temp directory from the Docker test
 docker/test/.test-temp
 
