@@ -33,7 +33,7 @@ export DOCKER_COMPOSE_PROJECT_NAME="$project_name"
 # We are using the Overrides method here: `-f ../docker-compose.yml`
 # is our main Compose file, then `-f docker-compose.yml` contains
 # test specific values which override values in our main Compose file
-compose_args="-f docker-compose.yml -f test/docker-compose.yml"
+compose_args="-f test/docker-compose.yml"
 
 docker_compose_cleanup()
 {
