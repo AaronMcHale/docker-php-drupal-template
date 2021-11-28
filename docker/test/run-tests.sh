@@ -27,29 +27,31 @@ mkdir .test-temp
 mkdir .test-temp/app
 mkdir .test-temp/composer
 
+export DOCKER_COMPOSE_PROJECT_NAME="$project_name"
+
 # Define common arguments that we pass to Docker Compose
 # We are using the Overrides method here: `-f ../docker-compose.yml`
 # is our main Compose file, then `-f docker-compose.yml` contains
 # test specific values which override values in our main Compose file
-compose_args="-f ../docker-compose.yml -f docker-compose.yml --project-name $project_name"
+compose_args="-f docker-compose.yml -f test/docker-compose.yml"
 
 docker_compose_cleanup()
 {
     echo 'Attempting to clean up...'
-    docker-compose $compose_args stop
-    docker-compose $compose_args kill
-    docker-compose $compose_args rm --force -v
+    ../../docker-compose $compose_args stop
+    ../../docker-compose $compose_args kill
+    ../../docker-compose $compose_args rm --force -v
     docker rmi --force "${project_name}_composer"
     rm -rf .test-temp
     echo 'Done'
 }
 
-docker-compose $compose_args build --no-cache
+../../docker-compose $compose_args build --no-cache
 if [ $? != 0 ]; then
     echo "Failed to build images from Compose files, aborting."
     docker_compose_cleanup; exit 1
 fi
-docker-compose $compose_args up -d --force-recreate
+../../docker-compose $compose_args up -d --force-recreate
 if [ $? != 0 ]; then
     echo "Failed to start containers from Compose files, aborting."
     docker_compose_cleanup; exit 1
