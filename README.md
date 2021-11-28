@@ -30,6 +30,7 @@ It is encouraged and sometimes necessary to customise any and all of the Dockerf
 * `docker/`: Stores files for building and running the Docker Images and Containers, e.g. docker-compose files, Dockerfiles, Nginx configuration, etc.
 * `vendor/`: Where dependencies installed through Composer live. Mounted inside Docker containers as `/app/vendor`.
 * `web/`: The Drupal HTTP web root, where you'll find `modules/`, `themes/`, etc. Mounted inside Docker containers as `/app/web`.
+* `example.env` and `.env`: Used to set environment variables.
 * `.gitignore`: Customise this as you see fit, it ships with some sensible defaults.
 * `.editorconfig` and `.gitattributes`: The Drupal-shipped versions.
 
