@@ -38,24 +38,13 @@ compose_args="-f docker-compose.yml -f test/docker-compose.yml"
 docker_compose_cleanup()
 {
     echo 'Attempting to clean up...'
+    docker rmi --force "${project_name}_composer"
     ../../docker-compose $compose_args stop
     ../../docker-compose $compose_args kill
     ../../docker-compose $compose_args rm --force -v
-    docker rmi --force "${project_name}_composer"
     rm -rf .test-temp
     echo 'Done'
 }
-
-../../docker-compose $compose_args build --no-cache
-if [ $? != 0 ]; then
-    echo "Failed to build images from Compose files, aborting."
-    docker_compose_cleanup; exit 1
-fi
-../../docker-compose $compose_args up -d --force-recreate
-if [ $? != 0 ]; then
-    echo "Failed to start containers from Compose files, aborting."
-    docker_compose_cleanup; exit 1
-fi
 
 # Build the Composer image, don't use cache
 docker build -t "${project_name}_composer" "../php-composer" --no-cache
@@ -71,6 +60,17 @@ export COMPOSER_IMAGE_NAME="${project_name}_composer"
 ../../composer create-project --no-interaction drupal/recommended-project .
 if [ $? != 0 ]; then
     echo "Failed to install Drupal, aborting."
+    docker_compose_cleanup; exit 1
+fi
+
+../../docker-compose $compose_args build --no-cache
+if [ $? != 0 ]; then
+    echo "Failed to build images from Compose files, aborting."
+    docker_compose_cleanup; exit 1
+fi
+../../docker-compose $compose_args up -d --force-recreate
+if [ $? != 0 ]; then
+    echo "Failed to start containers from Compose files, aborting."
     docker_compose_cleanup; exit 1
 fi
 
