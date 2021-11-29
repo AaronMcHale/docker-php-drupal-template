@@ -1,3 +1,5 @@
+.PHONY: build
+
 build: composer.lock vendor web
 	sh docker/build.sh
 
