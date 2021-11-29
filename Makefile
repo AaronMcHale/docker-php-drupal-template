@@ -1,5 +1,5 @@
 build: composer.lock vendor web
-	./docker/build.sh
+	sh docker/build.sh
 
 composer.lock:
 	echo "{}" > composer.lock
