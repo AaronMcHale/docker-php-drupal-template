@@ -22,4 +22,4 @@ tPWD="$PWD"; cd ..; project_name="${PWD##*/}"; cd "$tPWD"
 docker build -t "${project_name}_composer" "./php-composer"
 
 # Build the Docker Compose images
-docker-compose --project-name "$project_name" build
+../docker-compose build
