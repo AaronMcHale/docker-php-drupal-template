@@ -62,6 +62,7 @@ docker_args="$docker_args --read-only"
 # different projects. Use the `$COMPOSER_HOME` environment variable or default to
 # `$HOME/.composer` if not set.
 COMPOSER_HOME=${COMPOSER_HOME:-$HOME/.composer}
+if [ ! -d "$COMPOSER_HOME" ]; then mkdir "$COMPOSER_HOME"; fi
 docker_args="$docker_args --volume $COMPOSER_HOME:/tmp"
 echo "Mounting $COMPOSER_HOME for cache."
 # Alternatively, a temp filesystem can be used, however this doesn't persist.
