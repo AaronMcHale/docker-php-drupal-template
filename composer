@@ -26,7 +26,7 @@ fi
 
 # COMPOSER_IMAGE_NAME environment variable.
 # Specifies what the name of the Composer Docker Image is that we should use
-# by default this is the image that is built when running `docker/build.sh`.
+# by default this is the image that is built when running `make`.
 COMPOSER_IMAGE_NAME=${COMPOSER_IMAGE_NAME:-"${project_name}_composer"}
 
 # Look to see if the image we will use exists in Docker. Gets a formatted
@@ -39,7 +39,7 @@ COMPOSER_IMAGE_NAME=${COMPOSER_IMAGE_NAME:-"${project_name}_composer"}
 # images` output causing false results.
 img_check=$(docker images "$COMPOSER_IMAGE_NAME" --format "{{.Repository}}" | grep -ic "$COMPOSER_IMAGE_NAME" )
 if [ "$img_check" -le 0 ]; then
-    echo "Error: unable to find Docker Image $COMPOSER_IMAGE_NAME, try running build.sh in the docker directory of this project. Aborting."; exit 1
+    echo "Error: unable to find Docker Image $COMPOSER_IMAGE_NAME, try running make in the project root directory. Aborting."; exit 1
 fi
 
 # We'll append all of the arguments that we'll pass to `docker run` in this

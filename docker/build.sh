@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# This script is run when running `make`, it is recommended to run
+# `make` and not execute this script directly.
+
 # Exit this script if any exit with a non-zero state
 set -e
 

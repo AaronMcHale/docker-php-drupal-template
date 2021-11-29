@@ -10,7 +10,7 @@ When you use this template, you're first instinct will be to scrap this README f
 
 ## First run and usage
 
-Run `docker/build.sh` to build the Docker images, you will need to run this on:
+Run `make` to build the Docker images, you will need to run this on:
 * first time you setup a new system/environment
 * make changes to any of the Dockerfiles and associated files
 * rename the project directory, the name of this directory is used as part of the name of the built images and containers
@@ -30,6 +30,7 @@ It is encouraged and sometimes necessary to customise any and all of the Dockerf
 * `docker/`: Stores files for building and running the Docker Images and Containers, e.g. docker-compose files, Dockerfiles, Nginx configuration, etc.
 * `vendor/`: Where dependencies installed through Composer live. Mounted inside Docker containers as `/app/vendor`.
 * `web/`: The Drupal HTTP web root, where you'll find `modules/`, `themes/`, etc. Mounted inside Docker containers as `/app/web`.
+* `Makefile`: Tasks for building images and setting up the environment, executed by running `make`.
 * `example.env` and `.env`: Used to set environment variables.
 * `.gitignore`: Customise this as you see fit, it ships with some sensible defaults.
 * `.editorconfig` and `.gitattributes`: The Drupal-shipped versions.
