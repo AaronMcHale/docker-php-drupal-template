@@ -1,7 +1,7 @@
 # This is the base docker-compose file which runs across all environments
 # it is supplemented by environment specific compose files.
 
-version: "3.8"
+version: "3.6"
 
 services:
 
