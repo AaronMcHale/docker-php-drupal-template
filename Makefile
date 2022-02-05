@@ -1,6 +1,6 @@
 .PHONY: build
 
-build: composer.lock vendor web
+build: composer.lock vendor web web/sites/default/files
 	sh docker/build.sh
 
 composer.lock:
@@ -11,3 +11,7 @@ vendor:
 
 web:
 	mkdir web
+
+web/sites/default/files:
+	mkdir -p web/sites/default/files
+	chmod o+rw web/sites/default/files
