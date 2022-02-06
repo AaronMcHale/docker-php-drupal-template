@@ -3,7 +3,7 @@
 The following customised Docker Images are provided:
 * Nginx
 * Composer 2
-* Cron
+* Cron (uses Supercronic)
 * PHP-FPM
 
 The following images are provided but have not been customised:
