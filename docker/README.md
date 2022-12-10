@@ -1,12 +1,12 @@
 # Docker
 
 The following customised Docker Images are provided:
-* Nginx
 * Composer 2
 * Cron (uses Supercronic)
 * PHP-FPM
 
 The following images are provided but have not been customised:
+* Nginx
 * MariaDB
 
 ## Architectural rational and methodology
@@ -34,9 +34,3 @@ When mounting the host's file system inside the container, for example the app d
 The exception to this read-only rule is usually the /tmp directory. We set /tmp as a Temporary Filesystem (TempFS) inside each container, quite commonly running processes need to write files to /tmp. For example, Nginx writes some temporary files to /tmp in order to guarantee normal operations, such as its Process ID (PID). In theory if a container did become compromised and started writing suspicious files to /tmp, because this is a TempFS, we can simply restart the contianer and those files are gone.
 
 All of these measures make it practically impossible for a malicious executable inside a container to start infecting system files of the containers, and ensures that any malicious process is very well isolated.
-
-### As far as possible, configuration should be copied into images on build
-
-For example, there is sometimes a tendency in projects to simply mount the /etc/nginx directory, however instead of doing that we copy configuration into the container on build in the Nginx Dockerfile.
-
-This approach minimises when we need to mount the host's file system inside a container, and because we run containers with read-only file systems, this gives us a reasonable degree of certainty that no malicious code could modify those (sometimes critical) configurations. This also guarantees that a built image will always have the same configuration and will run in the same state consistently.
