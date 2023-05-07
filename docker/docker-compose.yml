@@ -26,6 +26,7 @@ services:
       - ../private_files:/app/private_files:rw
       - ../web/sites/default/files:/app/web/sites/default/files:rw
     tmpfs: [ /tmp ]
+    depends_on: [ mariadb ]
     networks: [ web, db ]
     read_only: true
     restart: on-failure
