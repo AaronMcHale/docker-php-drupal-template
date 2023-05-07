@@ -31,6 +31,17 @@ services:
     read_only: true
     restart: on-failure
 
+  drupal-cli:
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    volumes:
+      - ../:/app:rw
+    tmpfs: [ /tmp ]
+    networks: [ web, db ]
+    read_only: true
+    profiles: [ cli ]
+
   php-cron:
     build:
       context: ./php-cron
