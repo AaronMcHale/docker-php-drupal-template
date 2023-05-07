@@ -12,7 +12,7 @@ services:
       - ../web:/app/web:ro
     tmpfs: [ /tmp ]
     ports: [ 80:8080 ]
-    depends_on: [ php-fpm ]
+    depends_on: [ drupal ]
     networks: [ web ]
     read_only: true
     restart: on-failure
@@ -22,11 +22,9 @@ services:
       context: .
       dockerfile: "Dockerfile"
     volumes:
-      - ../vendor:/app/vendor:ro
+      - ../:/app:ro
       - ../private_files:/app/private_files:rw
-      - ../web:/app/web:rw
-      - ../composer.json:/app/composer.json:ro
-      - ../composer.lock:/app/composer.lock:ro
+      - ../web/sites/default/files:/app/web/sites/default/files:rw
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true
@@ -37,11 +35,9 @@ services:
       context: ./php-cron
       dockerfile: "Dockerfile"
     volumes:
-      - ../vendor:/app/vendor:ro
+      - ../:/app:ro
       - ../private_files:/app/private_files:rw
-      - ../web:/app/web:rw
-      - ../composer.json:/app/composer.json:ro
-      - ../composer.lock:/app/composer.lock:ro
+      - ../web/sites/default/files:/app/web/sites/default/files:rw
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true
