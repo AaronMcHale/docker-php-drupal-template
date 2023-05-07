@@ -17,7 +17,7 @@ services:
     read_only: true
     restart: on-failure
 
-  php-fpm:
+  drupal:
     build:
       context: .
       dockerfile: "Dockerfile"
