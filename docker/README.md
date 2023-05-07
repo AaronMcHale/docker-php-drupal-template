@@ -1,9 +1,10 @@
 # Docker
 
+A `drupal` Docker image is provided, based on the `php-fpm` image.
+
 The following customised Docker Images are provided:
 * Composer 2
 * Cron (uses Supercronic)
-* PHP-FPM
 
 The following images are provided but have not been customised:
 * Nginx

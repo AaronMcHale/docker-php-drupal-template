@@ -19,7 +19,7 @@ services:
 
   php-fpm:
     build:
-      context: ./php-fpm
+      context: .
       dockerfile: "Dockerfile"
     volumes:
       - ../vendor:/app/vendor:ro
