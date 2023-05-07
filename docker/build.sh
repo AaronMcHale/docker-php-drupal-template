@@ -20,8 +20,5 @@ tPWD="$PWD"; cd ..; project_name="${PWD##*/}"; cd "$tPWD"
 
 docker build -t "${project_name}_php" "./php"
 
-# Build the PHP Composer image
-docker build -t "${project_name}_composer" --build-arg PNAME="$project_name" "./php-composer"
-
 # Build the Docker Compose images
 ../docker-compose build --build-arg PNAME="$project_name"

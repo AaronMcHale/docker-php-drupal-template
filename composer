@@ -2,9 +2,7 @@
 # Script to execute composer inside a Docker container
 #
 # The following environment variables can be set to override specific values:
-# - COMPOSER_IMAGE_NAME
 # - COMPOSER_HOME
-# - COMPOSER_APP_DIR
 # See comments below for documentation on how these work.
 
 # Exit this script if any exit with a non-zero state
@@ -15,31 +13,10 @@ set -e
 # project.
 cd "${0%/*}"
 
-# Get the directory name of this directory, use that as the project name.
-project_name="${PWD##*/}"
-
 ## Export keys and values defined in the `.env` file.
 if [ -f ".env" ]; then
   # Source the .env file but ignore comments
   export $(grep -v '^#' .env | xargs)
-fi
-
-# COMPOSER_IMAGE_NAME environment variable.
-# Specifies what the name of the Composer Docker Image is that we should use
-# by default this is the image that is built when running `make`.
-COMPOSER_IMAGE_NAME=${COMPOSER_IMAGE_NAME:-"${project_name}_composer"}
-
-# Look to see if the image we will use exists in Docker. Gets a formatted
-# Docker image list, filtered by the image name we expect. If the image is
-# not in the image list `docker images` below should return nothing. Pipe
-# the output to grep to perform a count of the output from `docker images`.
-# Under normal circumstances `$img_check` will be either 0 or 1.
-# Using grep to count is safer than a simple equals check with `[`/`test`,
-# this avoids any pesky whitespace that may or may not be in the `docker
-# images` output causing false results.
-img_check=$(docker images "$COMPOSER_IMAGE_NAME" --format "{{.Repository}}" | grep -ic "$COMPOSER_IMAGE_NAME" )
-if [ "$img_check" -le 0 ]; then
-    echo "Error: unable to find Docker Image $COMPOSER_IMAGE_NAME, try running make in the project root directory. Aborting."; exit 1
 fi
 
 # We'll append all of the arguments that we'll pass to `docker run` in this
@@ -47,38 +24,16 @@ fi
 # once we're done with it.
 docker_args="--rm"
 
-# We need the user to be able to fully interact with Composer running in the container
-# - Tell docker to take over Standard In, Out and Error
-# - Run in interactive mode
-# - Attach to the active terminal
-# - Proxy any signals to Composer, e.g. if the user terminates the process
-docker_args="$docker_args --attach STDIN --attach STDOUT --attach STDERR --interactive --tty --sig-proxy=true"
-
-# Mount rootfs as read-only to help ensure the integrity of the container.
-docker_args="$docker_args --read-only"
-
 # Mount the Composer Home from the host system into the container, this way the
 # container can write to a central cache which persists and can be reused across
 # different projects. Use the `$COMPOSER_HOME` environment variable or default to
 # `$HOME/.composer` if not set.
 COMPOSER_HOME=${COMPOSER_HOME:-$HOME/.composer}
-if [ ! -d "$COMPOSER_HOME" ]; then mkdir "$COMPOSER_HOME"; fi
-docker_args="$docker_args --volume $COMPOSER_HOME:/tmp"
+if [ ! -d "$COMPOSER_HOME" ]; then
+  mkdir "$COMPOSER_HOME"
+fi
+docker_args="$docker_args --volume $COMPOSER_HOME:/home/composer"
 echo "Mounting $COMPOSER_HOME for cache."
-# Alternatively, a temp filesystem can be used, however this doesn't persist.
-#docker_args="$docker_args --tmpfs /tmp"
-
-# Mount the project root directory as a volume and set the working directory to this
-# path. When running commands like `composer install`, mounting the whole project,
-# instead of just `vendor` and `web` means Composer can create those directories for
-# us. We use the `$COMPOSER_APP_DIR` environment variable (which is not a Composer
-# thing) as our Docker test script uses this.
-COMPOSER_APP_DIR=${COMPOSER_APP_DIR:-$PWD}
-docker_args="$docker_args --volume $COMPOSER_APP_DIR:/app"
-
-# Set the working directory to the `/app` directory that exists only inside the
-# image.
-docker_args="$docker_args --workdir=/app"
 
 # Get the user and group IDs of the current user, we then pass these to the Docker
 # Container, which runs using these, thus when Composer running inside the container
@@ -93,4 +48,9 @@ docker_args="$docker_args --user=$user_id:$group_id"
 # Run the Docker container, passing in the various arguments we defined above.
 # `$*` allows us to pass in all of the parameters that were passed to this script,
 # this way we can just forward them onto the Composer command.
-docker run $docker_args "$COMPOSER_IMAGE_NAME" $*
+command="$*"
+if [ -z "$command" ]; then
+  command="composer"
+fi
+
+./docker-compose run $docker_args --entrypoint /usr/local/bin/composer-entrypoint.sh drupal-cli $command
