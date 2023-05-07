@@ -22,9 +22,9 @@ services:
       context: .
       dockerfile: "Dockerfile"
     volumes:
-      - ../:/app:ro
       - ../private_files:/app/private_files:rw
-      - ../web/sites/default/files:/app/web/sites/default/files:rw
+      - ../web/sites:/app/web/sites:rw
+      - ../:/app:ro
     tmpfs: [ /tmp ]
     depends_on: [ mariadb ]
     networks: [ web, db ]
@@ -47,9 +47,9 @@ services:
       context: ./php-cron
       dockerfile: "Dockerfile"
     volumes:
-      - ../:/app:ro
       - ../private_files:/app/private_files:rw
-      - ../web/sites/default/files:/app/web/sites/default/files:rw
+      - ../web/sites:/app/web/sites:rw
+      - ../:/app:ro
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true
