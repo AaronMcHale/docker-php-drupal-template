@@ -29,6 +29,7 @@ services:
     depends_on: [ mariadb ]
     networks: [ web, db ]
     read_only: true
+    user: ${COMPOSE_USER}
     restart: on-failure
 
   drupal-cli:
@@ -40,6 +41,7 @@ services:
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true
+    user: ${COMPOSE_USER}
     profiles: [ cli ]
 
   cron:
@@ -53,6 +55,7 @@ services:
     tmpfs: [ /tmp ]
     networks: [ web, db ]
     read_only: true
+    user: ${COMPOSE_USER}
     restart: on-failure
     entrypoint: "/usr/local/bin/supercronic"
     command: "/etc/crontab"

@@ -35,16 +35,6 @@ fi
 docker_args="$docker_args --volume $COMPOSER_HOME:/home/composer"
 echo "Mounting $COMPOSER_HOME for cache."
 
-# Get the user and group IDs of the current user, we then pass these to the Docker
-# Container, which runs using these, thus when Composer running inside the container
-# writes to the filesystem it uses the same user and group IDs as the current user.
-# This is important on a development environment, where we don't want file permission
-# conflicts to start occurring, and since Composer would usually only be run in
-# the development environment, this is the most optimal behaviour.
-user_id=$(id -u)
-group_id=$(id -g)
-docker_args="$docker_args --user=$user_id:$group_id"
-
 # Run the Docker container, passing in the various arguments we defined above.
 # `$*` allows us to pass in all of the parameters that were passed to this script,
 # this way we can just forward them onto the Composer command.
