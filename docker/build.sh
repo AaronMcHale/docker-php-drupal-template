@@ -18,7 +18,5 @@ cd "${0%/*}"
 # where we were.
 tPWD="$PWD"; cd ..; project_name="${PWD##*/}"; cd "$tPWD"
 
-docker build -t "${project_name}_php" "./php"
-
 # Build the Docker Compose images
 ../docker-compose build --build-arg PNAME="$project_name"
