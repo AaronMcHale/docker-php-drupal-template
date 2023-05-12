@@ -42,9 +42,9 @@ services:
     read_only: true
     profiles: [ cli ]
 
-  php-cron:
+  cron:
     build:
-      context: ./php-cron
+      context: .
       dockerfile: "Dockerfile"
     volumes:
       - ../private_files:/app/private_files:rw
@@ -54,6 +54,8 @@ services:
     networks: [ web, db ]
     read_only: true
     restart: on-failure
+    entrypoint: "/usr/local/bin/supercronic"
+    command: "/etc/crontab"
 
   mariadb:
     image: mariadb
