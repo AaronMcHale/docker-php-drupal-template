@@ -3,6 +3,15 @@
 
 version: "3.6"
 
+# Define common configuration for Drupal services, each service merges in
+# this configuration.
+x-drupal-base:
+  &drupal-base
+  build: .
+  tmpfs: [ /tmp ]
+  read_only: true
+  user: ${COMPOSE_USER}
+
 services:
 
   nginx:
@@ -18,44 +27,29 @@ services:
     restart: on-failure
 
   drupal:
-    build:
-      context: .
-      dockerfile: "Dockerfile"
+    << : *drupal-base
     volumes:
       - ../private_files:/app/private_files:rw
       - ../web/sites:/app/web/sites:rw
       - ../:/app:ro
-    tmpfs: [ /tmp ]
     depends_on: [ mariadb ]
     networks: [ web, db ]
-    read_only: true
-    user: ${COMPOSE_USER}
     restart: on-failure
 
   drupal-cli:
-    build:
-      context: .
-      dockerfile: "Dockerfile"
+    << : *drupal-base
     volumes:
       - ../:/app:rw
-    tmpfs: [ /tmp ]
-    networks: [ web, db ]
-    read_only: true
-    user: ${COMPOSE_USER}
+    networks: [ db ]
     profiles: [ cli ]
 
   cron:
-    build:
-      context: .
-      dockerfile: "Dockerfile"
+    << : *drupal-base
     volumes:
       - ../private_files:/app/private_files:rw
       - ../web/sites:/app/web/sites:rw
       - ../:/app:ro
-    tmpfs: [ /tmp ]
-    networks: [ web, db ]
-    read_only: true
-    user: ${COMPOSE_USER}
+    networks: [ db ]
     restart: on-failure
     entrypoint: "/usr/local/bin/supercronic"
     command: "/etc/crontab"
