@@ -8,6 +8,7 @@ version: "3.6"
 x-drupal-base:
   &drupal-base
   build: .
+  env_file: ../.env
   tmpfs: [ /tmp ]
   read_only: true
   user: ${COMPOSE_USER}
@@ -60,8 +61,7 @@ services:
       - db:/var/lib/mysql:rw
     tmpfs: [ /tmp, /run/mysqld ]
     networks: [ db ]
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    env_file: ../.env
     read_only: true
     restart: on-failure
 
