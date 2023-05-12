@@ -7,7 +7,7 @@ version: "3.6"
 # this configuration.
 x-drupal-base:
   &drupal-base
-  build: .
+  image: ${DRUPAL_IMAGE_NAME}
   env_file: ../.env
   tmpfs: [ /tmp ]
   read_only: true
@@ -29,6 +29,7 @@ services:
 
   drupal:
     << : *drupal-base
+    build: .
     volumes:
       - ../private_files:/app/private_files:rw
       - ../web/sites:/app/web/sites:rw
