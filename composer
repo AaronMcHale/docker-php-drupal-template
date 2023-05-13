@@ -19,11 +19,6 @@ if [ -f ".env" ]; then
   export $(grep -v '^#' .env | xargs)
 fi
 
-# We'll append all of the arguments that we'll pass to `docker run` in this
-# `docker_args` variable. Start by telling Docker to remove it from the list
-# once we're done with it.
-docker_args="--rm"
-
 # Mount the Composer Home from the host system into the container, this way the
 # container can write to a central cache which persists and can be reused across
 # different projects. Use the `$COMPOSER_HOME` environment variable or default to
@@ -32,8 +27,7 @@ COMPOSER_HOME=${COMPOSER_HOME:-$HOME/.composer}
 if [ ! -d "$COMPOSER_HOME" ]; then
   mkdir "$COMPOSER_HOME"
 fi
-docker_args="$docker_args --volume $COMPOSER_HOME:/home/composer"
-echo "Mounting $COMPOSER_HOME for cache."
+echo "Using $COMPOSER_HOME for cache."
 
 # Run the Docker container, passing in the various arguments we defined above.
 # `$*` allows us to pass in all of the parameters that were passed to this script,
@@ -43,4 +37,11 @@ if [ -z "$command" ]; then
   command="composer"
 fi
 
-./docker-compose run $docker_args --entrypoint /usr/local/bin/composer-entrypoint.sh drupal-cli $command
+# Run Composer using the drupal-cli service, container is removed on exit
+./docker-compose run \
+  --rm \
+  $docker_args \
+  --volume "$COMPOSER_HOME"":/home/composer" \
+  --entrypoint /usr/local/bin/composer-entrypoint.sh \
+  drupal-cli \
+  $command
