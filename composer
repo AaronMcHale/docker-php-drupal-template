@@ -40,7 +40,6 @@ fi
 # Run Composer using the drupal-cli service, container is removed on exit
 ./docker-compose run \
   --rm \
-  $docker_args \
   --volume "$COMPOSER_HOME"":/home/composer" \
   --entrypoint /usr/local/bin/composer-entrypoint.sh \
   drupal-cli \
