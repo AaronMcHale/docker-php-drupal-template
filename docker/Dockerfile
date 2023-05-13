@@ -37,10 +37,9 @@ COPY --from=composer:2 /docker-entrypoint.sh /usr/local/bin/composer-entrypoint.
 ENV COMPOSER_HOME /home/composer
 
 # Install Drush Launcher
-RUN set -e \
-  cd /usr/local/bin; \
-	curl -o drush -OL https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar ;\
-	chmod +x drush
+RUN set -e; \
+	curl -o /usr/local/bin/drush -OL https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar; \
+	chmod +x /usr/local/bin/drush
 
 # Add supercronic to this image, using the `hectormolinero/supercronic` image.
 # Supercronic itself does not provide an image we can pull from, so we use
