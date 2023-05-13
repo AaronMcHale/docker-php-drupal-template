@@ -19,10 +19,10 @@ if [ -f ".env" ]; then
   export $(grep -v '^#' .env | xargs)
 fi
 
-# Mount the Composer Home from the host system into the container, this way the
-# container can write to a central cache which persists and can be reused across
-# different projects. Use the `$COMPOSER_HOME` environment variable or default to
-# `$HOME/.composer` if not set.
+# /home/composer is used for cache, by default mount the .composer folder from
+# the current user's home folder inside the container to allow cache to be
+# shared across projects. This can be overriden using the COMPOSER_HOME
+# environment variable.
 COMPOSER_HOME=${COMPOSER_HOME:-$HOME/.composer}
 if [ ! -d "$COMPOSER_HOME" ]; then
   mkdir "$COMPOSER_HOME"
