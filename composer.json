@@ -16,8 +16,8 @@
     ],
     "require": {
         "composer/installers": "^1.9",
-        "drupal/core-composer-scaffold": "^10.0",
-        "drupal/core-recommended": "^10.0"
+        "drupal/core-composer-scaffold": "^10.1",
+        "drupal/core-recommended": "^10.1"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -48,5 +48,8 @@
             "web/profiles/custom/{$name}": [ "type:drupal-custom-profile" ],
             "web/themes/custom/{$name}": [ "type:drupal-custom-theme" ]
         }
+    },
+    "require-dev": {
+        "drush/drush": "^11.6"
     }
 }
