@@ -12,7 +12,7 @@ When you use this template, you're first instinct will be to scrap this README f
 
 Run `make` to build the Docker images, you will need to run this on:
 * first time you setup a new system/environment
-* make changes to any of the Dockerfiles and associated files
+* make changes to the Dockerfiles and associated files
 * rename the project directory, the name of this directory is used as part of the name of the built images and containers
 
 Run `./composer install` Composer will read the supplied `composer.json` and install all dependencies, including Drupal Core. You will need to do this each time you set up a new environment/system, and after any of the dependencies in the `composer.json` have been updated.

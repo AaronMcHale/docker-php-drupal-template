@@ -2,13 +2,9 @@
 
 A `drupal` Docker image is provided, based on the `php-fpm` image.
 
-The following customised Docker Images are provided:
+This image is also used when running:
 * Composer 2
 * Cron (uses Supercronic)
-
-The following images are provided but have not been customised:
-* Nginx
-* MariaDB
 
 ## Architectural rational and methodology
 
@@ -22,7 +18,7 @@ This section exists to provide clarify on why these choices were made, especiall
 
 Following best practice and subscribing to the micro-service philosophy, each primary process runs in its own container.
 
-For instance, this means that we have separate images and containers for related yet distinct processes, such as: PHP-FPM, Cron and Composer. This is in contracts to some other projects where these may be bundled into a single image.
+For instance, this means that we have separate containers for related yet distinct processes, such as: PHP-FPM, Cron and Composer.
 
 Keeping this separation means that these processes are properly isolated and filesystem permissions can be granted appropriately. For instance, the Composer image (./php-composer) is run with the user and group of the user running Composer commands, this is because it may need to write to the entire app directory; whereas the PHP-FPM processes (in the context of Drupal and under normal circumstances) would only need to write to the app/web/sites directory.
 
