@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+# Script to execute drush inside a Docker container
+
+# Exit this script if any exit with a non-zero state
+set -e
+
+# Ensure we are in the project root directory. This still allows the script
+# to work even if we call it from a different directory in or out of the
+# project.
+cd "${0%/*}"
+
+command="$*"
+if [ -z "$command" ]; then
+  command="drush"
+fi
+
+# Run Drush using the drupal-cli service, container is removed on exit
+./docker-compose run \
+  --rm \
+  --entrypoint /usr/local/bin/drush \
+  drupal-cli \
+  $command
