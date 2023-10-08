@@ -7,8 +7,17 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 RUN install-php-extensions apcu gd opcache pdo_mysql uploadprogress
 
 RUN set -e; \
-  # Use the default dev configuration
-  mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"; \
+  # Environment specific configuration
+  if [ "$DOCKER_COMPOSE_ENV" == "prod" ]; then \
+    mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
+  else \
+    mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"; \
+    # For non-production environments, send all mail to mailhog
+    { \
+      echo "; Send all mail to the mailhog container"; \
+      echo "sendmail_path = /usr/sbin/sendmail -S mailhog:1025"; \
+    } | tee -a "$PHP_INI_DIR""/conf.d/docker-php-mailhog.ini"; \
+  fi; \
   # PHP-FPM logs to Standard Out/Error so turn off logging to Nginx FastCSG
   { \
     echo; \
