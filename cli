@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+
+# Exit this script if any exit with a non-zero state
+set -e
+
+# Ensure we are in the project root directory. This still allows the script
+# to work even if we call it from a different directory in or out of the
+# project.
+cd "${0%/*}"
+
+# Export keys and values defined in the `.env` file.
+if [ -f ".env" ]; then
+  # Source the .env file but ignore comments
+  export $(grep -v '^#' .env | xargs)
+fi
+
+if [ "$1" = "composer" ]; then
+  # /home/composer is used for cache, by default mount the .composer folder from
+  # the current user's home folder inside the container to allow cache to be
+  # shared across projects. This can be overriden using the COMPOSER_HOME
+  # environment variable.
+  COMPOSER_HOME=${COMPOSER_HOME:-$HOME/.composer}
+  if [ ! -d "$COMPOSER_HOME" ]; then
+    mkdir "$COMPOSER_HOME"
+  fi
+  echo "Using $COMPOSER_HOME for cache."
+  docker_composer_args="$docker_composer_args"" --volume ""$COMPOSER_HOME"":/home/composer"
+fi
+
+# Run Composer using the drupal-cli service, container is removed on exit
+./docker-compose run \
+  --rm \
+  --env CLI_CMD_ALIAS="$0" \
+  $docker_composer_args \
+  drupal-cli \
+  $@

@@ -5,6 +5,7 @@ A `drupal` Docker image is provided, based on the `php-fpm` image.
 This image is also used when running:
 * Composer 2
 * Cron (uses Supercronic)
+* Drush and any other similar tools.
 
 ## Architectural rational and methodology
 

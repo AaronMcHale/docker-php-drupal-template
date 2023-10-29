@@ -27,7 +27,7 @@ RUN set -e; \
 
 # Install dependencies that are required by Composer, the entrypoint script, or are
 # generally used during normal operations.
-# - tini: used by composer-entrypoint.sh
+# - tini: used by the cli-docker-entrypoint.sh script
 # - git openssh: for pulling Composer repos using Git
 # - zip unzip: for packing/unpacking Composer packages that use zip
 # - patch: if we need to have Composer patch some of the codebase using patch files
@@ -37,6 +37,10 @@ RUN set -e; \
   git openssh-client \
   zip unzip \
   patch
+
+# Copy the cli-docker-entrypoint.sh script
+COPY cli-docker-entrypoint.sh /
+RUN chmod +x /cli-docker-entrypoint.sh
 
 # Copy Composer and the entrypoint script from the Composer image on Docker Hub
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer

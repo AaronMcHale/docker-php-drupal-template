@@ -44,6 +44,7 @@ services:
       - ../:/app:rw
     networks: [ db ]
     profiles: [ cli ]
+    entrypoint: "/cli-docker-entrypoint.sh"
 
   cron:
     << : *drupal-base
