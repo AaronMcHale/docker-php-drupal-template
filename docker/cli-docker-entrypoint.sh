@@ -86,11 +86,14 @@ shift
 # user provided. Tini is a useful utility for running inside containers
 # as it takes care of managing signals, among other things. For more
 # info see: https://github.com/krallin/tini
+# Use `set` to override `$@` with the command below, which is then passed
+# into `exec`.
 set -- /sbin/tini -- $cmd "$@"
 
-# Use `exec` to run the final command along with all of its arguments 
-# and parameters, exec runs the command but replaces the current shell
-# with the command. This essentially ensures that tini is the first
-# process running in the container, tini will then spawn the sub-process
-# for running the actual command.
+# Use `exec` to run the final command, which as built using `set` along
+# with all of its arguments and parameters.
+# `exec` runs the command but replaces the current shell with the command.
+# This essentially ensures that tini is the first process running in the
+# container, tini will then spawn the sub-process for running the actual
+# command.
 exec "$@"
