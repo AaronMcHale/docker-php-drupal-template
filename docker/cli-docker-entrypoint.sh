@@ -55,7 +55,7 @@ case "$1" in
     # using Composer, so we can't assume it exists.
     if [ ! -x "/app/vendor/bin/drush" ]; then
       echo "Could not find Drush, has it been installed? Install Drush with:"
-      echo "$entry_cmd"" composer require drush/drush"
+      echo "$entry_cmd_alias"" composer require drush/drush"
       echo "Error: /app/vendor/bin/brush is not executable"
       exit 1
     fi
