@@ -28,6 +28,7 @@ print_help() {
   echo
   echo "Available commands:"
   echo "  composer"
+  echo "  drupal"
   echo "  drush"
   # exit the script after printing the help text, as we don't need to
   # do anyting else after the help text is shown.
@@ -49,6 +50,14 @@ fi
 case "$1" in
   "composer")
     cmd="/usr/local/bin/composer" ;;
+  "drupal")
+    # Run the `drupal` utility which comes with Core.
+    if [ ! -f "/app/web/core/scripts/drupal" ]; then
+      echo "Drupal Core does not appear to be installed:"
+      echo "Error: /app/web/core/scripts/drupal does not exist"
+      exit 1
+    fi
+    cmd="php /app/web/core/scripts/drupal" ;;
   "drush")
     # Test to make sure Drush has actually been installed in the project
     # before trying to run it, Drush is installed as part of the project
@@ -77,7 +86,7 @@ shift
 # user provided. Tini is a useful utility for running inside containers
 # as it takes care of managing signals, among other things. For more
 # info see: https://github.com/krallin/tini
-set -- /sbin/tini -- "$cmd" $@
+set -- /sbin/tini -- $cmd "$@"
 
 # Use `exec` to run the final command along with all of its arguments 
 # and parameters, exec runs the command but replaces the current shell
