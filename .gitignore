@@ -6,9 +6,6 @@
 # Ignore the root .env file
 .env
 
-# Ignore the .test-temp directory from the Docker test
-docker/test/.test-temp
-
 ###
 # Entries from Drupal's example.gitignore, not everything has been included
 ###
