@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
-## Script to execute docker-compose commands with the correct environment.
+## Script to execute `docker compose` commands with the correct environment.
 ##
 ## Any parameters passed to this script will be passed through to
-## docker-compose, for example running `./docker-compose up -d` will
-## result in the `up -d` being passed through to `docker-compose`.
+## `docker compose`, for example running `./docker-compose up -d` will
+## result in the `up -d` being passed through to `docker compose`.
 ##
 ## The following environment variables can be set to override specific values:
 ## - DOCKER_COMPOSE_PROJECT_NAME
@@ -33,13 +33,13 @@ if [ -f ".env" ]; then
   # Source the .env file but ignore comments
   export $(grep -v '^#' .env | xargs)
   # Include the `.env` file at the root of the project if it exists, so
-  # that docker-compose will also use it.
+  # that docker compose will also use it.
   env_file_args="--env-file ../.env"
 else
   env_file_args=""
 fi
 
-## We need to run docker-compose from the `docker` sub-directory.
+## We need to run `docker compose` from the `docker` sub-directory.
 cd "docker"
 
 ## Construct the chain of docker-compose files, if we have a environment
@@ -60,9 +60,9 @@ user_id=$(id -u)
 group_id=$(id -g)
 export COMPOSE_USER="$user_id":"$group_id"
 
-## Run `docker-compose` with the constructed arguments, and pass through
+## Run `docker compose` with the constructed arguments, and pass through
 ## any arguments/parameters passed to this script.
-docker-compose \
+docker compose \
   --project-name "$DOCKER_COMPOSE_PROJECT_NAME" \
   $compose_file_args \
   $env_file_args \

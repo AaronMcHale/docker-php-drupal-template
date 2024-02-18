@@ -28,7 +28,7 @@ It is encouraged and sometimes necessary to customise any and all of the Dockerf
 ## Key files and directories
 
 * `./cli`: Executable shell script which is used to run Composer, Drush and other tools. These are run inside a container. This is the only supported method of running these tools.
-* `./docker-compose`: Executable shell script to run Docker Compose commands, passing commands to this script is the recommended way as it sets up the environment properly for Docker Compose, running `docker-compose` directly will require you to pass in the relevant environment information manually, this wrapper script will do it for you.
+* `./docker-compose`: Executable shell script to run Docker Compose commands, passing commands to this script is the recommended way as it sets up the environment properly for Docker Compose, running `docker compose` directly will require you to pass in the relevant environment information manually, this wrapper script will do it for you.
 * `docker/`: Stores files for building and running the Docker Images and Containers, e.g. docker-compose files, Dockerfiles, Nginx configuration, etc.
 * `vendor/`: Where dependencies installed through Composer live. Mounted inside Docker containers as `/app/vendor`.
 * `web/`: The Drupal HTTP web root, where you'll find `modules/`, `themes/`, etc. Mounted inside Docker containers as `/app/web`.
