@@ -55,7 +55,7 @@ services:
     networks: [ db ]
     restart: on-failure
     entrypoint: "/usr/local/bin/supercronic"
-    command: "/etc/crontab"
+    command: "/app/docker/crontab"
 
   mariadb:
     image: mariadb

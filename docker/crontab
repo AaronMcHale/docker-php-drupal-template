@@ -1,4 +1,7 @@
-# Cron tasks in this file will be run as the www-data user
+# Cron tasks in this file will be run as the app user inside the cron container
+#
+# When making changes to this file, simply restart the cron container to apply
+# the changes.
 #
 # min   hour    day     month   weekday command
 

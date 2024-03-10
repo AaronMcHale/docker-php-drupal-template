@@ -55,9 +55,6 @@ ENV COMPOSER_HOME /home/composer
 # provide the correct binary based on our platform requirements.
 COPY --from=hectormolinero/supercronic /usr/bin/supercronic /usr/local/bin/
 
-# Copy Crontab files into the image
-COPY crontab /etc/
-
 WORKDIR "/app"
 EXPOSE 9000
 USER www-data
