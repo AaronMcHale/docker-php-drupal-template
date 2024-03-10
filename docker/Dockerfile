@@ -8,7 +8,7 @@ RUN install-php-extensions apcu gd opcache pdo_mysql uploadprogress
 
 RUN set -e; \
   # Environment specific configuration
-  if [ "$DOCKER_COMPOSE_ENV" == "prod" ]; then \
+  if [ "$ENVIRONMENT" == "prod" ]; then \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
   else \
     mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"; \

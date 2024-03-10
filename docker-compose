@@ -49,8 +49,8 @@ cd "docker"
 ## Construct the chain of docker-compose files, if we have a environment
 ## specific compose file, include that in addition to the base compose
 ## file.
-if [ -f "docker-compose.""$DOCKER_COMPOSE_ENV"".yml" ]; then
-  compose_file_args="--file docker-compose.yml --file docker-compose.""$DOCKER_COMPOSE_ENV"".yml"
+if [ -f "docker-compose.""$ENVIRONMENT"".yml" ]; then
+  compose_file_args="--file docker-compose.yml --file docker-compose.""$ENVIRONMENT"".yml"
 else
   compose_file_args="--file docker-compose.yml"
 fi

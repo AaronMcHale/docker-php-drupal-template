@@ -10,7 +10,7 @@ When you use this template, you're first instinct will be to scrap this README f
 
 ## First run and usage
 
-Copy the `example.env` file and name it `.env`, ensure that the `DOCKER_COMPOSE_ENV` environment variable is set appropriately. See the comments in `example.env` for more information.
+Copy the `example.env` file and name it `.env`, ensure that the `ENVIRONMENT` environment variable is set appropriately. See the comments in `example.env` for more information.
 
 Run `make` to build the Docker images, you will need to run this on:
 * first time you setup a new system/environment
