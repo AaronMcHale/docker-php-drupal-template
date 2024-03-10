@@ -12,7 +12,10 @@ RUN set -e; \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
   else \
     mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"; \
-    # For non-production environments, send all mail to mailhog
+  fi; \
+  # For non-production environments, send all mail to mailhog
+  # For more info see `docker-compose.mailhog.yml`.
+  if [ "$ENVIRONMENT" != "prod" ]; then \
     { \
       echo "; Send all mail to the mailhog container"; \
       echo "sendmail_path = /usr/sbin/sendmail -S mailhog:1025"; \

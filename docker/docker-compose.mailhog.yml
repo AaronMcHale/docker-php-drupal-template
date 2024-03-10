@@ -1,0 +1,18 @@
+# Compose file to start the mailhog container.
+#
+# Mailhog is used on non-production environments to capture all
+# outgoing mail from Drupal (or any PHP scripts). The mailhog
+# interface can be accessed from http://localhost:8025.
+#
+# The logic for whether this file is loaded can be found in the
+# `docker-compose` script. See also the `Dockerfile` for the logic
+# which adds the php.ini configuration to tell php to send mail
+# to mailhog.
+services:
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+    networks: [ web ]
+    restart: on-failure

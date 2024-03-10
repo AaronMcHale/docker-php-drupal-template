@@ -46,10 +46,17 @@ fi
 ## We need to run `docker compose` from the `docker` sub-directory.
 cd "docker"
 
-# If we have an environment-specific docker-compose file, tell Docker
-# Compose to load that in addition to the base docker-compose file.
+# Set initial value for COMPOSE_FILE so we can add to it next
+export COMPOSE_FILE="docker-compose.yml"
+
+# If we are not running on production, tell docker to run mailhog
+if [ "$ENVIRONMENT" != "prod" ]; then
+  export COMPOSE_FILE="$COMPOSE_FILE"":docker-compose.mailhog.yml"
+fi
+
+# If we have an environment-specific docker-compose file, also load that
 if [ -f "docker-compose.""$ENVIRONMENT"".yml" ]; then
-  export COMPOSE_FILE="docker-compose.yml:docker-compose.""$ENVIRONMENT"".yml"
+  export COMPOSE_FILE="$COMPOSE_FILE"":docker-compose.""$ENVIRONMENT"".yml"
 fi
 
 ## Run `docker compose` with the constructed arguments, and pass through
