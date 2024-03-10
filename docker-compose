@@ -51,14 +51,9 @@ else
   compose_file_args="--file docker-compose.yml"
 fi
 
-# Get the user and group ID of the current user, set as an environment variable,
-# we then use this in the docker-compose.yml file to tell Docker to run the drupal
-# and other containers using this user and group ID. Doing this ensures there are
-# no file permission issues when doing things like installing Drupal or saving user
-# uploaded content.
-user_id=$(id -u)
-group_id=$(id -g)
-export COMPOSE_USER="$user_id":"$group_id"
+# Get the ID of the current user and user's group, used to run the containers.
+export ENV_USER_ID="$(id -u)"
+export ENV_GROUP_ID="$(id -g)"
 
 ## Run `docker compose` with the constructed arguments, and pass through
 ## any arguments/parameters passed to this script.

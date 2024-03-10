@@ -11,7 +11,7 @@ x-drupal-base:
   env_file: ../.env
   tmpfs: [ /tmp ]
   read_only: true
-  user: ${COMPOSE_USER}
+  user: "${ENV_USER_ID?}:${ENV_GROUP_ID?}"
 
 services:
 
