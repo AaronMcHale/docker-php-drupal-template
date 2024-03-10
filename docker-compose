@@ -28,6 +28,10 @@ export DRUPAL_IMAGE_NAME="$project_name"
 ## Can be used to override the name of the Docker Compose project name.
 DOCKER_COMPOSE_PROJECT_NAME=${DOCKER_COMPOSE_PROJECT_NAME:-"$project_name"}
 
+# Get the ID of the current user and user's group, used to run the containers.
+export ENV_USER_ID="$(id -u)"
+export ENV_GROUP_ID="$(id -g)"
+
 ## Export keys and values defined in the `.env` file.
 if [ -f ".env" ]; then
   # Source the .env file but ignore comments
@@ -50,10 +54,6 @@ if [ -f "docker-compose.""$DOCKER_COMPOSE_ENV"".yml" ]; then
 else
   compose_file_args="--file docker-compose.yml"
 fi
-
-# Get the ID of the current user and user's group, used to run the containers.
-export ENV_USER_ID="$(id -u)"
-export ENV_GROUP_ID="$(id -g)"
 
 ## Run `docker compose` with the constructed arguments, and pass through
 ## any arguments/parameters passed to this script.
