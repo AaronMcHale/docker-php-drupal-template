@@ -46,13 +46,10 @@ fi
 ## We need to run `docker compose` from the `docker` sub-directory.
 cd "docker"
 
-## Construct the chain of docker-compose files, if we have a environment
-## specific compose file, include that in addition to the base compose
-## file.
+# If we have an environment-specific docker-compose file, tell Docker
+# Compose to load that in addition to the base docker-compose file.
 if [ -f "docker-compose.""$ENVIRONMENT"".yml" ]; then
-  compose_file_args="--file docker-compose.yml --file docker-compose.""$ENVIRONMENT"".yml"
-else
-  compose_file_args="--file docker-compose.yml"
+  export COMPOSE_FILE="docker-compose.yml:docker-compose.""$ENVIRONMENT"".yml"
 fi
 
 ## Run `docker compose` with the constructed arguments, and pass through
