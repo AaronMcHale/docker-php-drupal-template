@@ -56,11 +56,7 @@ ENV COMPOSER_HOME /home/composer
 COPY --from=hectormolinero/supercronic /usr/bin/supercronic /usr/local/bin/
 
 # Copy Crontab files into the image
-COPY cron/crontab /etc/
-
-# Copy the specially written Drupal Cron PHP script into the iamge
-COPY cron/drupal-cron-run.php /
-RUN chmod +x /drupal-cron-run.php
+COPY crontab /etc/
 
 WORKDIR "/app"
 EXPOSE 9000

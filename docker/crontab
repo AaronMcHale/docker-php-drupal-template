@@ -1,0 +1,6 @@
+# Cron tasks in this file will be run as the www-data user
+#
+# min   hour    day     month   weekday command
+
+# Run Drupal Cron using Drush
+*      */1     *       *       *       ./vendor/bin/drush core:cron
