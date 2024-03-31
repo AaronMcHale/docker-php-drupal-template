@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 # Install additional PHP extensions,
 # "mlocati/php-extension-installer" provides an easy way to install extensions
