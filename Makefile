@@ -4,7 +4,7 @@ build: web/sites/default/files
 	sh -- . ./env.sh && docker compose build
 
 install: build
-	sh -- . ./env.sh && ./cli composer install
+	./cli composer install
 
 up:
 	sh -- . ./env.sh && docker compose up -d

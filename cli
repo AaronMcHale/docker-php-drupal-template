@@ -8,11 +8,8 @@ set -e
 # project.
 cd "${0%/*}"
 
-# Export keys and values defined in the `.env` file.
-if [ -f ".env" ]; then
-  # Source the .env file but ignore comments
-  export $(grep -v '^#' .env | xargs)
-fi
+# Source env.sh to ensure that all environment variables are loaded.
+. ./env.sh
 
 if [ "$1" = "composer" ]; then
   # /home/composer is used for cache, by default mount the .composer folder from
