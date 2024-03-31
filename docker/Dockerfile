@@ -34,12 +34,18 @@ RUN set -e; \
 # - git openssh: for pulling Composer repos using Git
 # - zip unzip: for packing/unpacking Composer packages that use zip
 # - patch: if we need to have Composer patch some of the codebase using patch files
+# - mysql-client: used by Drush for commands like sql-dump, site-install, etc
+# - bash: used by Drush to run other commands like mysqldump, when using sql-dump, etc
+# - rsync: used by Drush when syncing database, e.g. from production server to localhost
 RUN set -e; \
   apk add --no-cache \
   tini \
   git openssh-client \
   zip unzip \
-  patch
+  patch \
+  mysql-client \
+  bash \
+  rsync
 
 # Copy the cli-docker-entrypoint.sh script
 COPY cli-docker-entrypoint.sh /
