@@ -14,7 +14,7 @@ Copy the `example.env` file and name it `.env`, ensure that the `ENVIRONMENT` en
 
 Before running any Docker commands, source the `env.sh` script, run:
 ```
-. env.sh
+. ./env.sh
 ```
 This will export the required environment variables to your shell.
 

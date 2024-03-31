@@ -1,7 +1,7 @@
 # Sets up the environment for running docker compose.
 #
 # Before running `docker` commands, source this script by running:
-# `. env.sh`
+# `. ./env.sh`
 #
 # Refer to the `README.md` for more information.
 
