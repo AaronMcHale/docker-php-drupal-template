@@ -7,7 +7,7 @@ version: "3.6"
 # this configuration.
 x-drupal-base:
   &drupal-base
-  image: ${DRUPAL_IMAGE_NAME}
+  image: "${DRUPAL_IMAGE_NAME?}"
   env_file: .env
   tmpfs: [ /tmp ]
   read_only: true
