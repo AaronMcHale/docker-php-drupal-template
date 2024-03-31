@@ -16,3 +16,10 @@ services:
       - 8025:8025
     networks: [ web ]
     restart: on-failure
+
+  drupal:
+    volumes:
+      - ./docker/mailhog-php.ini:/usr/local/etc/php/conf.d/docker-mailhog.ini:ro
+  drupal-cli:
+    volumes:
+      - ./docker/mailhog-php.ini:/usr/local/etc/php/conf.d/docker-mailhog.ini:ro

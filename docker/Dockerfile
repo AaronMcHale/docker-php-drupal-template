@@ -10,14 +10,6 @@ RUN set -e; \
   # Use production php.ini config. Settings like error reporting and display are
   # managed separately by Drupal and each CLI utility.
   cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
-  # For non-production environments, send all mail to mailhog
-  # For more info see `docker-compose.mailhog.yml`.
-  if [ "$ENVIRONMENT" != "prod" ]; then \
-    { \
-      echo "; Send all mail to the mailhog container"; \
-      echo "sendmail_path = /usr/sbin/sendmail -S mailhog:1025"; \
-    } | tee -a "$PHP_INI_DIR""/conf.d/docker-php-mailhog.ini"; \
-  fi; \
   # PHP-FPM logs to Standard Out/Error so turn off logging to Nginx FastCSG
   { \
     echo; \
