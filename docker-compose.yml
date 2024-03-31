@@ -8,7 +8,7 @@ version: "3.6"
 x-drupal-base:
   &drupal-base
   image: ${DRUPAL_IMAGE_NAME}
-  env_file: ../.env
+  env_file: .env
   tmpfs: [ /tmp ]
   read_only: true
   user: "${ENV_USER_ID?}:${ENV_GROUP_ID?}"
@@ -18,8 +18,8 @@ services:
   nginx:
     image: nginx:alpine
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ../web:/app/web:ro
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./web:/app/web:ro
     tmpfs: [ /tmp ]
     ports: [ 80:8080 ]
     depends_on: [ drupal ]
@@ -31,9 +31,9 @@ services:
     << : *drupal-base
     build: .
     volumes:
-      - ../private_files:/app/private_files:rw
-      - ../web/sites:/app/web/sites:rw
-      - ../:/app:ro
+      - ./private_files:/app/private_files:rw
+      - ./web/sites:/app/web/sites:rw
+      - ./:/app:ro
     depends_on: [ mariadb ]
     networks: [ web, db ]
     restart: on-failure
@@ -41,7 +41,7 @@ services:
   drupal-cli:
     << : *drupal-base
     volumes:
-      - ../:/app:rw
+      - ./:/app:rw
     networks: [ db ]
     profiles: [ cli ]
     entrypoint: "/cli-docker-entrypoint.sh"
@@ -49,9 +49,9 @@ services:
   cron:
     << : *drupal-base
     volumes:
-      - ../private_files:/app/private_files:rw
-      - ../web/sites:/app/web/sites:rw
-      - ../:/app:ro
+      - ./private_files:/app/private_files:rw
+      - ./web/sites:/app/web/sites:rw
+      - ./:/app:ro
     networks: [ db ]
     restart: on-failure
     entrypoint: "/usr/local/bin/supercronic"
@@ -63,7 +63,7 @@ services:
       - db:/var/lib/mysql:rw
     tmpfs: [ /tmp, /run/mysqld ]
     networks: [ db ]
-    env_file: ../.env
+    env_file: .env
     read_only: true
     restart: on-failure
 

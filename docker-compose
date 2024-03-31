@@ -24,10 +24,6 @@ project_name="${PWD##*/}"
 ## drupal services.
 export DRUPAL_IMAGE_NAME="$project_name"
 
-## DOCKER_COMPOSE_PROJECT_NAME environment variable.
-## Can be used to override the name of the Docker Compose project name.
-DOCKER_COMPOSE_PROJECT_NAME=${DOCKER_COMPOSE_PROJECT_NAME:-"$project_name"}
-
 # Get the ID of the current user and user's group, used to run the containers.
 export ENV_USER_ID="$(id -u)"
 export ENV_GROUP_ID="$(id -g)"
@@ -38,13 +34,10 @@ if [ -f ".env" ]; then
   export $(grep -v '^#' .env | xargs)
   # Include the `.env` file at the root of the project if it exists, so
   # that docker compose will also use it.
-  env_file_args="--env-file ../.env"
+  env_file_args="--env-file .env"
 else
   env_file_args=""
 fi
-
-## We need to run `docker compose` from the `docker` sub-directory.
-cd "docker"
 
 # Set initial value for COMPOSE_FILE so we can add to it next
 export COMPOSE_FILE="docker-compose.yml"
@@ -62,7 +55,6 @@ fi
 ## Run `docker compose` with the constructed arguments, and pass through
 ## any arguments/parameters passed to this script.
 docker compose \
-  --project-name "$DOCKER_COMPOSE_PROJECT_NAME" \
   $compose_file_args \
   $env_file_args \
   $@
