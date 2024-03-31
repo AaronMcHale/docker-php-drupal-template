@@ -7,12 +7,9 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 RUN install-php-extensions apcu gd opcache pdo_mysql uploadprogress
 
 RUN set -e; \
-  # Environment specific configuration
-  if [ "$ENVIRONMENT" == "prod" ]; then \
-    mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
-  else \
-    mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"; \
-  fi; \
+  # Use production php.ini config. Settings like error reporting and display are
+  # managed separately by Drupal and each CLI utility.
+  cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
   # For non-production environments, send all mail to mailhog
   # For more info see `docker-compose.mailhog.yml`.
   if [ "$ENVIRONMENT" != "prod" ]; then \
