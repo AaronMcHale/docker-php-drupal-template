@@ -28,15 +28,12 @@ export DRUPAL_IMAGE_NAME="$project_name"
 export ENV_USER_ID="$(id -u)"
 export ENV_GROUP_ID="$(id -g)"
 
-## Export keys and values defined in the `.env` file.
 if [ -f ".env" ]; then
-  # Source the .env file but ignore comments
-  export $(grep -v '^#' .env | xargs)
-  # Include the `.env` file at the root of the project if it exists, so
-  # that docker compose will also use it.
-  env_file_args="--env-file .env"
+  # Source the .env file but ignore comments and blank lines
+  export $(grep '^[[:blank:]]*[^[:blank:]#]' .env | xargs)
 else
-  env_file_args=""
+  # Warn if .env file doesn't exist
+  echo "WARNING: .env does not exist, .env must exist to run Traefik, copy local.env or prod.env."
 fi
 
 # Set initial value for COMPOSE_FILE so we can add to it next
@@ -56,5 +53,4 @@ fi
 ## any arguments/parameters passed to this script.
 docker compose \
   $compose_file_args \
-  $env_file_args \
   $@
