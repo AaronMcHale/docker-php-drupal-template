@@ -1,10 +1,13 @@
-.PHONY: build, install
+.PHONY: build, install, up
 
 build: web/sites/default/files
-	./docker-compose build
+	sh -- . env.sh && docker compose build
 
 install: build
-	./cli composer install
+	sh -- . env.sh && ./cli composer install
+
+up:
+	sh -- . env.sh && docker compose up -d
 
 web/sites/default/files:
 	mkdir -p web/sites/default/files

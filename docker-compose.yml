@@ -29,7 +29,7 @@ services:
 
   drupal:
     << : *drupal-base
-    build: .
+    build: ./docker
     volumes:
       - ./private_files:/app/private_files:rw
       - ./web/sites:/app/web/sites:rw

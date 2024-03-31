@@ -28,7 +28,7 @@ if [ "$1" = "composer" ]; then
 fi
 
 # Run Composer using the drupal-cli service, container is removed on exit
-./docker-compose run \
+docker compose run \
   --rm \
   --env CLI_CMD_ALIAS="$0" \
   $docker_composer_args \
