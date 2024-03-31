@@ -8,18 +8,42 @@
 # `docker-compose` script. See also the `Dockerfile` for the logic
 # which adds the php.ini configuration to tell php to send mail
 # to mailhog.
+#
+# Here we also mount php.ini settings into other containers to tell
+# PHP to send mail to mailhog. Any extra services which send mail
+# should be added below.
 services:
 
   mailhog:
     image: mailhog/mailhog
     ports:
       - 8025:8025
-    networks: [ web ]
+    # We have mailhog join both the web and db networks so that all
+    # other containers can communicate with mailhog, regardless of
+    # which network they're on. We're less concerned about security
+    # here because mailhog does not run in production.
+    networks:
+      - web
+      - db
     restart: on-failure
 
+  # This is where we mount the php.ini config inside the other containers. If you
+  # add any extra services, add each service below, using the name of each service
+  # and mounting the volumne as shown.
+  #
+  # This docker-compose file is loaded after the environment-specific compose files,
+  # so any services defined in those files can also be referenced here.
+  #
+  # In `env.sh` we tell Docker to merge together the main docker-compose.yml, the
+  # environment specific compose file, and this compose file, so the volume
+  # defined here for the mailhog-php.ini file will be merged with the other volumes
+  # defined for each service.
   drupal:
     volumes:
       - ./docker/mailhog-php.ini:/usr/local/etc/php/conf.d/docker-mailhog.ini:ro
   drupal-cli:
+    volumes:
+      - ./docker/mailhog-php.ini:/usr/local/etc/php/conf.d/docker-mailhog.ini:ro
+  cron:
     volumes:
       - ./docker/mailhog-php.ini:/usr/local/etc/php/conf.d/docker-mailhog.ini:ro
