@@ -30,6 +30,7 @@ print_help() {
   echo "  composer"
   echo "  drupal"
   echo "  drush"
+  echo "  shell (sh)  Interactive terminal or run commands."
   # exit the script after printing the help text, as we don't need to
   # do anyting else after the help text is shown.
   exit 0
@@ -40,6 +41,16 @@ if [ $# -eq 0 ]; then
   print_help
 fi
 
+# Save `$1` as `$opt`, then use the `shift` utility to remove `$1` as it
+# is no longer need it, `$2` then becomes `$1` and so on. In other words
+# this shifts forward all of the positional arguments passed to this script.
+# For example if the user entered `composer update`, the first argument,
+# `composer` is dropped. This means that `$@` would then simply be `update`.
+# We can then safely pass `$@` to `/user/bin/composer` as if the user had
+# called it directly.
+opt=$1
+shift
+
 # This is the actual logic which sets the command which will be run
 # based on the user's selection. We check on `$1``, which is the
 # first argument passed to this script, for instance:
@@ -47,7 +58,7 @@ fi
 # the command to check for.
 # When adding new commands, add a new case, and set the `cmd`
 # variable to the path of the actual executable to run.
-case "$1" in
+case "$opt" in
   "composer")
     cmd="/usr/local/bin/composer" ;;
   "drupal")
@@ -69,18 +80,32 @@ case "$1" in
       exit 1
     fi
     cmd="/app/vendor/bin/drush" ;;
+  "sh"|"shell")
+    if [ "$1" = "--bash" ]; then
+      cmd="/bin/bash"
+      # Remove "--bash" from the positional arguments so it is not passed to /bin/bash
+      shift
+    elif [ "$1" = "--help" ]; then
+      echo "Start a shell in a new container, defaults to /bin/sh in interactive mode."
+      echo
+      echo "Usage: ""$entry_cmd_alias"" shell [ARGS] ..."
+      echo
+      echo "Arguments:"
+      echo "  --bash  Use /bin/bash instead of /bin/sh as the shell"
+      echo "  --help  Displays this message"
+      echo
+      echo "All further arguments are passed to the shell on startup."
+      echo
+      echo "To run a command using the shell, use -c followed by the command."
+      exit 0
+    else
+      cmd="/bin/sh"
+    fi
+    ;;
   *)
     # If the command entered by the user was not known, then print help.
     print_help ;;
 esac
-
-# Use the `shift` utility to remove `$1` as we no longer need it. Now `$2`
-# becomes `$1`, in other words this shifts forward all of the positional
-# arguments passed to this script. For example if the user entered
-# `composer update`, the first argument, `composer` is dropped. This means
-# that `$@` would then simply be `update`. We can then safely pass `$@`
-# to `/user/bin/composer` as if the user had called it directly.
-shift
 
 # We use tini to run the actual command with all of the arguments that the
 # user provided. Tini is a useful utility for running inside containers
@@ -88,7 +113,7 @@ shift
 # info see: https://github.com/krallin/tini
 # Use `set` to override `$@` with the command below, which is then passed
 # into `exec`.
-set -- /sbin/tini -- $cmd "$@"
+set -- /sbin/tini -- $cmd $@
 
 # Use `exec` to run the final command, which as built using `set` along
 # with all of its arguments and parameters.
@@ -96,4 +121,4 @@ set -- /sbin/tini -- $cmd "$@"
 # This essentially ensures that tini is the first process running in the
 # container, tini will then spawn the sub-process for running the actual
 # command.
-exec "$@"
+exec $@
