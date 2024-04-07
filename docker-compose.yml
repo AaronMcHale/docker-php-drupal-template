@@ -38,12 +38,21 @@ services:
     networks: [ web, db ]
     restart: on-failure
 
+  # The drupal-cli service is used by the `./cli` script. This allows us
+  # to give this service write permissions to the entrie project for
+  # Composer and Drush. The drupal service only has write permissions to
+  # the files directories to mitigate against any potential Remote Code
+  # Execution (RCE) vulnerabilities.
   drupal-cli:
     << : *drupal-base
     volumes:
       - ./:/app:rw
     networks: [ db ]
+    # Specify a profile so that this service is not created by default
+    # when running `./cli` it creates the drupal-cli service as a
+    # temporary container.
     profiles: [ cli ]
+    # Override the entrypoint to use the custom cli entrypoint script
     entrypoint: "/cli-docker-entrypoint.sh"
 
   cron:
