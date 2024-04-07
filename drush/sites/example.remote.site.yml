@@ -1,0 +1,38 @@
+# File: example.remote.site.yml
+#
+# This is an example Drush site alias configuration for a dev, test, live
+# setup on a remote server.
+#
+# In this example when using Drush site alias commands you would use:
+#   @remote.dev
+#   @remote.test
+#   @remote.live
+#
+# To use these aliases:
+# 1. Copy this file and name it `remote.site.yml`.
+# 2. Set `host` and `user` as appropriate for each environment.
+# 2. Change the `drush-script` path below for each environment to point to the
+#    absolute path of the `drush-launcher` script on the remote server.
+#    Note: this is the script found in the `/drush` folder. So if this project
+#    is stored at `/srv/example.com/web` on the remote server, set `drush-script`
+#    to `/srv/example.com/drush/drush-launcher`.
+#
+# To test the site aliases, you can run `./cli drush @remote.live status`.
+#
+# See https://www.drush.org/13.x/site-aliases/ for more information on how
+# to setup and use Drush site aliases.
+dev:
+  host: dev.example.com
+  user: app-user
+  paths:
+    drush-script: drush/drush-launcher
+test:
+  host: test.example.com
+  user: app-user
+  paths:
+    drush-script: drush/drush-launcher
+live:
+  host: example.com
+  user: app-user
+  paths:
+    drush-script: drush/drush-launcher

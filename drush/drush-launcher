@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+#
+# A warpper script used when running Drush on the remote server over SSH.
+#
+# To use this script, set the `drush-script` path in your site aliases.
+#
+# For more details see `example.remote.site.yml` in the `sites` folder.
+
+# Exit this script if any exit with a non-zero state
+set -e
+
+# Ensure we are in the directory that this script is located. This still
+# allows the script to work even if we call it from a different directory
+# in or out of the project.
+cd "${0%/*}"
+
+# Run the Drush using the cli, all parameters/arguments passed to this
+# script will be passed to Drush.
+../cli drush $@

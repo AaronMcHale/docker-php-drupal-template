@@ -47,6 +47,29 @@ services:
     << : *drupal-base
     volumes:
       - ./:/app:rw
+      # Both Composer and Drush store various things in the user's home
+      # folder, including: configuration, caching, SSH keys, and Drush
+      # backups. It was simplier and less friction to just mount the
+      # entire home folder, rather than those individual folders. This
+      # also allows directories like drush-backups to be created as the
+      # user.
+      #
+      # On production environments, the application should be running under
+      # its own user, so there shouldn't be a security concern here.
+      #
+      # Additionally, when using Drush sql:sync, the rsync path that
+      # Drush uses on the remote side is the same path that Drush on the
+      # remote running in the drupal-cli container dumped the sql to, so
+      # this path needs to be consistent both inside and outside of the
+      # drupal-cli container. Since $HOME/drush-backups is one of the
+      # default locations Drush uses, this also made sense to use.
+      - ${HOME?}:${HOME?}:rw
+      # Mount /etc/passwd and /etc/group in the container so that Composer
+      # and Drush can locate the user's home folder, and so that they can
+      # start remote SSH connections, as ssh-client does not work without
+      # the current user being listed in passwd.
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
     networks: [ db ]
     # Specify a profile so that this service is not created by default
     # when running `./cli` it creates the drupal-cli service as a
