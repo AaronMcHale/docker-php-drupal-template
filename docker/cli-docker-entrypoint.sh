@@ -24,7 +24,10 @@ fi
 print_help() {
   echo "Entrypoint script for running common Drupal CLI utilities and commands."
   echo
-  echo "Usage: ""$entry_cmd_alias"" COMMAND..."
+  echo "Usage: ""$entry_cmd_alias"" [ARGS] COMMAND ..."
+  echo
+  echo "Available arguments:"
+  echo "  --with-ssh-agent  Start an SSH agent in the container, useful for Drush sync commands"
   echo
   echo "Available commands:"
   echo "  composer"
@@ -39,6 +42,16 @@ print_help() {
 if [ $# -eq 0 ]; then
   # No command passed, show help
   print_help
+fi
+
+# If the flag is provided, start an SSH agent inside the container.
+# Useful when running commands like drush sql:sync where it can make multiple
+# remote connections over SSH.
+if [ "$1" == "--with-ssh-agent" ]; then
+  echo "Starting SSH agent, you may be prompted to unlock your private key..."
+  eval $(/usr/bin/ssh-agent)
+  /usr/bin/ssh-add
+  shift
 fi
 
 # Save `$1` as `$opt`, then use the `shift` utility to remove `$1` as it
