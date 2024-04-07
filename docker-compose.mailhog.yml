@@ -1,13 +1,11 @@
 # Compose file to start the mailhog container.
 #
-# Mailhog is used on non-production environments to capture all
-# outgoing mail from Drupal (or any PHP scripts). The mailhog
-# interface can be accessed from http://localhost:8025.
+# Mailhog is used on non-live environments to capture all outgoing
+# mail from Drupal (or any PHP scripts). The mailhog interface can
+# be accessed from http://localhost:8025.
 #
 # The logic for whether this file is loaded can be found in the
-# `docker-compose` script. See also the `Dockerfile` for the logic
-# which adds the php.ini configuration to tell php to send mail
-# to mailhog.
+# `env.sh` script.
 #
 # Here we also mount php.ini settings into other containers to tell
 # PHP to send mail to mailhog. Any extra services which send mail
@@ -21,7 +19,7 @@ services:
     # We have mailhog join both the web and db networks so that all
     # other containers can communicate with mailhog, regardless of
     # which network they're on. We're less concerned about security
-    # here because mailhog does not run in production.
+    # here because mailhog does not run in the LIVE environment.
     networks:
       - web
       - db

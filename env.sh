@@ -38,7 +38,7 @@ if [ -f "docker-compose.""$ENVIRONMENT"".yml" ]; then
   export COMPOSE_FILE="docker-compose.yml:docker-compose.""$ENVIRONMENT"".yml"
 fi
 
-# If we are not running on production, tell docker to run mailhog
-if [ "$ENVIRONMENT" != "prod" ]; then
+# If we are not running on live, tell docker to run mailhog
+if [ "$ENVIRONMENT" != "live" ]; then
   export COMPOSE_FILE="$COMPOSE_FILE"":docker-compose.mailhog.yml"
 fi
