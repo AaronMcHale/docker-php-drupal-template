@@ -95,8 +95,12 @@ services:
       - db:/var/lib/mysql:rw
     tmpfs: [ /tmp, /run/mysqld ]
     networks: [ db ]
-    env_file: .env
     environment:
+      # Set the db user, pass and name from the current environment to ensure that
+      # these values have been set and ensure that the env.sh script was sourced.
+      MARIADB_USER: ${MARIADB_USER?}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD?}
+      MARIADB_DATABASE: ${MARIADB_DATABASE?}
       # Use a randomly generated password for database root user to improve security.
       # The password is printed in the Docker log when the container is first setup
       # and can be reset later if needed.

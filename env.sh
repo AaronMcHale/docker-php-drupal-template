@@ -29,6 +29,12 @@ else
   echo "WARNING: .env does not exist, .env must exist to run Traefik, copy local.env or prod.env."
 fi
 
+# Verify that database connection env variables are set.
+if [ -z "$MARIADB_USER" ] || [ -z "$MARIADB_PASSWORD" ] || [ -z "$MARIADB_DATABASE" ]; then
+  echo "WARNING: Database connection environment variables do not appear to all be set."
+  echo "Ensure that the MARIADB_USER, MARIADB_PASSWORD and MARIADB_DATABASE variables are all set in the .env file."
+fi
+
 # Set initial value for COMPOSE_FILE so we can add to it next
 export COMPOSE_FILE="docker-compose.yml"
 
