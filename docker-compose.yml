@@ -96,6 +96,11 @@ services:
     tmpfs: [ /tmp, /run/mysqld ]
     networks: [ db ]
     env_file: .env
+    environment:
+      # Use a randomly generated password for database root user to improve security.
+      # The password is printed in the Docker log when the container is first setup
+      # and can be reset later if needed.
+      MARIADB_RANDOM_ROOT_PASSWORD: "true"
     read_only: true
     restart: on-failure
 
