@@ -45,6 +45,7 @@ services:
     << : *drupal-base
     build: ./docker
     volumes:
+      - ./docker/drupal-php.ini:/usr/local/etc/php/conf.d/drupal-php.ini:ro
       - ./private_files:/app/private_files:rw
       - ./web/sites/default/files:/app/web/sites/default/files:rw
       - ./:/app:ro
@@ -60,6 +61,7 @@ services:
   drupal-cli:
     << : *drupal-base
     volumes:
+      - ./docker/drupal-php.ini:/usr/local/etc/php/conf.d/drupal-php.ini:ro
       - ./:/app:rw
       # Both Composer and Drush store various things in the user's home
       # folder, including: configuration, caching, SSH keys, and Drush
@@ -95,6 +97,7 @@ services:
   cron:
     << : *drupal-base
     volumes:
+      - ./docker/drupal-php.ini:/usr/local/etc/php/conf.d/drupal-php.ini:ro
       - ./private_files:/app/private_files:rw
       - ./web/sites/default/files:/app/web/sites/default/files:rw
       - ./:/app:ro

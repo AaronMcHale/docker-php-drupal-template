@@ -17,8 +17,6 @@ RUN set -e; \
     echo "php_admin_flag[fastcgi.logging] = off"; \
   } | tee -a "$PHP_INI_DIR"/../php-fpm.d/docker.conf
 
-COPY "3445816-install-with-env.ini" $PHP_INI_DIR/conf.d
-
 # Install dependencies that are required by Composer, the entrypoint script, or are
 # generally used during normal operations.
 # - tini: used by the cli-docker-entrypoint.sh script
