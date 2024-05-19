@@ -16,6 +16,7 @@
     ],
     "require": {
         "composer/installers": "^2.0",
+        "cweagans/composer-patches": "^1.7",
         "drupal/core-composer-scaffold": "^10.2",
         "drupal/core-recommended": "^10.2",
         "drush/drush": "^12.4"
@@ -28,10 +29,8 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true,
-            "drupal/core-composer-scaffold": true,
-            "phpstan/extension-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "php-http/discovery": true
+            "cweagans/composer-patches": true,
+            "drupal/core-composer-scaffold": true
         },
         "sort-packages": true
     },
@@ -49,6 +48,13 @@
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
+            },
+            "file-mapping": {
+                "[web-root]/sites/default/settings.php": {
+                    "path": "assets/drupal-scaffold/files/settings.php",
+                    "overwrite": false
+                },
+                "[web-root]/sites/default/settings.from-env.php": "assets/drupal-scaffold/files/settings.from-env.php"
             }
         },
         "installer-paths": {
@@ -61,6 +67,14 @@
             "web/modules/custom/{$name}": [ "type:drupal-custom-module" ],
             "web/profiles/custom/{$name}": [ "type:drupal-custom-profile" ],
             "web/themes/custom/{$name}": [ "type:drupal-custom-theme" ]
+        },
+        "patchLevel": {
+            "drupal/core": "-p2"
+        },
+        "patches": {
+            "drupal/core": {
+                "#3445816 Making Drupal automatically installable with default environment variables": "assets/composer-patches/3445816-install-with-env.patch"
+            }
         }
     }
 }

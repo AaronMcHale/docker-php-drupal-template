@@ -9,6 +9,20 @@ x-drupal-base:
   &drupal-base
   image: "${DRUPAL_IMAGE_NAME?}"
   env_file: .env
+  # Rather than hard-coding the database connection info and sync directory
+  # into settings.php, we pass it to Drupal using the `DRUPAL_` environment
+  # variables. Drupal will use these at runtime, rather than looking in
+  # `settings.php`.
+  # Note that support for these is added in a patch, see the `patches`
+  # section of the `composer.json` for details.
+  environment:
+    DRUPAL_CONFIG_SYNC_DIR: "../config/sync"
+    DRUPAL_DB_DRIVER: "mysql"
+    DRUPAL_DB_NAME: ${MARIADB_DATABASE?}
+    DRUPAL_DB_USERNAME: ${MARIADB_USER?}
+    DRUPAL_DB_PASSWORD: ${MARIADB_PASSWORD?}
+    DRUPAL_DB_HOST: "mariadb"
+    DRUPAL_DB_PORT: "3306"
   tmpfs: [ /tmp ]
   read_only: true
   user: "${ENV_USER_ID?}:${ENV_GROUP_ID?}"
@@ -32,7 +46,7 @@ services:
     build: ./docker
     volumes:
       - ./private_files:/app/private_files:rw
-      - ./web/sites:/app/web/sites:rw
+      - ./web/sites/default/files:/app/web/sites/default/files:rw
       - ./:/app:ro
     depends_on: [ mariadb ]
     networks: [ web, db ]
@@ -82,7 +96,7 @@ services:
     << : *drupal-base
     volumes:
       - ./private_files:/app/private_files:rw
-      - ./web/sites:/app/web/sites:rw
+      - ./web/sites/default/files:/app/web/sites/default/files:rw
       - ./:/app:ro
     networks: [ db ]
     restart: on-failure

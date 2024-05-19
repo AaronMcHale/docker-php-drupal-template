@@ -24,7 +24,6 @@
 
 # Also ignore private_files directory used by our project.
 /private_files
-!/private_files/README.md
 
 # Ignore SimpleTest multi-site environment.
 /web/sites/simpletest

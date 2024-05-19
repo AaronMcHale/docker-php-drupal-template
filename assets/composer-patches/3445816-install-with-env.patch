@@ -1,0 +1,107 @@
+diff --git a/core/lib/Drupal/Core/Site/Settings.php b/core/lib/Drupal/Core/Site/Settings.php
+index 16b70a0c95f3680ec76ff22a7af8ef9e4554dff8..34e22212d66bcd4f1a7cfc4c1048c902765b45a7 100644
+--- a/core/lib/Drupal/Core/Site/Settings.php
++++ b/core/lib/Drupal/Core/Site/Settings.php
+@@ -148,6 +148,46 @@ public static function initialize($app_root, $site_path, &$class_loader) {
+ 
+     self::handleDeprecations($settings);
+ 
++    $hash_salt = $settings['hash_salt'] ?? '';
++    if ($hash_salt === '') {
++      $env_hash_salt = $_ENV['DRUPAL_HASH_SALT'] ?? '';
++      if ($env_hash_salt !== '') {
++        $settings['hash_salt'] = $env_hash_salt;
++      }
++    }
++
++    $config_sync_directory = $settings['config_sync_directory'] ?? '';
++    if ($config_sync_directory === '') {
++      $env_config_sync_dir = $_ENV['DRUPAL_CONFIG_SYNC_DIR'] ?? '';
++      if ($env_config_sync_dir !== '') {
++        $settings['config_sync_directory'] = $env_config_sync_dir;
++      }
++    }
++
++    if (count($databases) === 0) {
++      $default_db_driver = $_ENV['DRUPAL_DB_DRIVER'] ?? '';
++      if ($default_db_driver !== '') {
++        if ($default_db_driver === 'sqlite') {
++          $databases['default']['default'] = [
++            'driver' => $_ENV['DRUPAL_DB_DRIVER'],
++            'database' => $_ENV['DRUPAL_DB_NAME'],
++            'prefix' => '',
++          ];
++        }
++        else {
++          $databases['default']['default'] = [
++            'driver' => $_ENV['DRUPAL_DB_DRIVER'],
++            'database' => $_ENV['DRUPAL_DB_NAME'],
++            'username' => $_ENV['DRUPAL_DB_USERNAME'],
++            'password' => $_ENV['DRUPAL_DB_PASSWORD'],
++            'host' => $_ENV['DRUPAL_DB_HOST'] ?? '',
++            'port' => $_ENV['DRUPAL_DB_PORT'] ?? '',
++            'prefix' => $_ENV['DRUPAL_DB_PREFIX'] ?? '',
++          ];
++        }
++      }
++    }
++
+     // Initialize databases.
+     Database::setMultipleConnectionInfo($databases, $class_loader, $app_root);
+ 
+diff --git a/core/tests/Drupal/Tests/Core/Site/SettingsTest.php b/core/tests/Drupal/Tests/Core/Site/SettingsTest.php
+index a2908c00e69046ddea2ad91032eb511baed57d18..236cc6db563220598d1d76be5713efbd2a9f29e3 100644
+--- a/core/tests/Drupal/Tests/Core/Site/SettingsTest.php
++++ b/core/tests/Drupal/Tests/Core/Site/SettingsTest.php
+@@ -393,4 +393,51 @@ public static function providerTestDatabaseInfoInitialization(): array {
+     ];
+   }
+ 
++  /**
++   * Tests initialization from environment variables.
++   */
++  public function testFromEnvironment(): void {
++    $hash_salt = $this->randomString();
++    $_ENV['DRUPAL_HASH_SALT'] = $hash_salt;
++    $config_sync_directory = vfsStream::url('root/config');
++    $_ENV['DRUPAL_CONFIG_SYNC_DIR'] = $config_sync_directory;
++
++    $_ENV['DRUPAL_DB_DRIVER'] = 'sqlite';
++    $_ENV['DRUPAL_DB_NAME'] = vfsStream::url('root/db.sqlite');
++
++    Settings::initialize(vfsStream::url('root'), 'sites', $class_loader);
++    self::assertEquals($hash_salt, Settings::getHashSalt());
++    self::assertEquals($config_sync_directory, Settings::get('config_sync_directory'));
++    self::assertEquals([
++      'default' => [
++        'driver' => 'sqlite',
++        'database' => 'vfs://root/db.sqlite',
++        'prefix' => '',
++        'namespace' => 'Drupal\sqlite\Driver\Database\sqlite',
++        'autoload' => 'core/modules/sqlite/src/Driver/Database/sqlite/',
++      ],
++    ], Database::getConnectionInfo());
++    Database::removeConnection('default');
++
++    $_ENV['DRUPAL_DB_DRIVER'] = 'mysql';
++    $_ENV['DRUPAL_DB_NAME'] = 'db_name';
++    $_ENV['DRUPAL_DB_USERNAME'] = 'db_user';
++    $_ENV['DRUPAL_DB_PASSWORD'] = 'db_pass';
++    $_ENV['DRUPAL_DB_HOST'] = 'db_host';
++    Settings::initialize(vfsStream::url('root'), 'sites', $class_loader);
++    self::assertEquals([
++      'default' => [
++        'driver' => 'mysql',
++        'database' => 'db_name',
++        'prefix' => '',
++        'namespace' => 'Drupal\mysql\Driver\Database\mysql',
++        'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
++        'username' => 'db_user',
++        'password' => 'db_pass',
++        'host' => 'db_host',
++        'port' => '',
++      ],
++    ], Database::getConnectionInfo());
++  }
++
+ }
