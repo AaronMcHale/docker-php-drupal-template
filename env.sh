@@ -8,6 +8,7 @@
 # Clear any previously stored values for known variables.
 unset \
   ENVIRONMENT \
+  DATA_DIR \
   DRUPAL_IMAGE_NAME \
   COMPOSE_FILE \
   ENV_USER_ID \
@@ -27,6 +28,22 @@ if [ -f ".env" ]; then
 else
   # Warn if .env file doesn't exist
   echo "WARNING: .env does not exist, .env must exist to run Traefik, copy local.env or prod.env."
+fi
+
+# Create data directory, if it doesn't exist
+if [ -z "$DATA_DIR" ]; then
+  echo "WARNING: DATA_DIR environment variable is not set."
+else
+  if [ ! -e "$DATA_DIR" ]; then
+    echo "Creating data dir at ""$DATA_DIR"
+    mkdir "$DATA_DIR"
+  fi
+  if [ ! -e "$DATA_DIR""/mysql" ]; then
+    mkdir "$DATA_DIR""/mysql"
+  fi
+  if [ ! -e "$DATA_DIR""/private_files" ]; then
+    mkdir "$DATA_DIR""/private_files"
+  fi
 fi
 
 # Verify that database connection env variables are set.

@@ -46,7 +46,7 @@ services:
     build: ./docker
     volumes:
       - ./docker/drupal-php.ini:/usr/local/etc/php/conf.d/drupal-php.ini:ro
-      - ./private_files:/app/private_files:rw
+      - ${DATA_DIR?}/private_files:/private_files:rw
       - ./web/sites/default/files:/app/web/sites/default/files:rw
       - ./:/app:ro
     depends_on: [ mariadb ]
@@ -62,6 +62,7 @@ services:
     << : *drupal-base
     volumes:
       - ./docker/drupal-php.ini:/usr/local/etc/php/conf.d/drupal-php.ini:ro
+      - ${DATA_DIR?}/private_files:/private_files:rw
       - ./:/app:rw
       # Both Composer and Drush store various things in the user's home
       # folder, including: configuration, caching, SSH keys, and Drush
@@ -98,7 +99,7 @@ services:
     << : *drupal-base
     volumes:
       - ./docker/drupal-php.ini:/usr/local/etc/php/conf.d/drupal-php.ini:ro
-      - ./private_files:/app/private_files:rw
+      - ${DATA_DIR?}/private_files:/private_files:rw
       - ./web/sites/default/files:/app/web/sites/default/files:rw
       - ./:/app:ro
     networks: [ db ]
@@ -108,10 +109,6 @@ services:
 
   mariadb:
     image: mariadb
-    volumes:
-      - db:/var/lib/mysql:rw
-    tmpfs: [ /tmp, /run/mysqld ]
-    networks: [ db ]
     environment:
       # Set the db user, pass and name from the current environment to ensure that
       # these values have been set and ensure that the env.sh script was sourced.
@@ -122,14 +119,16 @@ services:
       # The password is printed in the Docker log when the container is first setup
       # and can be reset later if needed.
       MARIADB_RANDOM_ROOT_PASSWORD: "true"
+    tmpfs: [ /tmp, /run/mysqld ]
+    networks: [ db ]
     read_only: true
     restart: on-failure
+    volumes:
+      - ${DATA_DIR?}/mysql:/var/lib/mysql:rw
+    user: "${ENV_USER_ID?}:${ENV_GROUP_ID?}"
 
 networks:
   web:
     driver: bridge
   db:
     driver: bridge
-
-volumes:
-  db:

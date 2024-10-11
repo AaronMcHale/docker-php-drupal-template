@@ -36,11 +36,9 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "if [ ! -d private_files ]; then mkdir private_files; fi",
             "if [ ! -d web/sites/default/files ]; then mkdir web/sites/default/files; fi"
         ],
         "post-update-cmd": [
-            "if [ ! -d private_files ]; then mkdir private_files; fi",
             "if [ ! -d web/sites/default/files ]; then mkdir web/sites/default/files; fi"
         ]
     },

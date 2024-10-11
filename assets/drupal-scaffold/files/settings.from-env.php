@@ -34,10 +34,10 @@ $env = getenv('ENVIRONMENT');
 $settings['skip_permissions_hardening'] = TRUE;
 
 /**
- * Set the private files path, we store private files in the /private_files
- * directory at the root of the project, outisde of the web root.
+ * Set the Drupal private files path.
+ * The private_files directory is mounted at the root of the container.
  */
-$settings['file_private_path'] = '../private_files';
+$settings['file_private_path'] = '/private_files';
 
 /**
  * Set the Drupal trusted host patterns, if the DRUPAL_TRUSTED_HOST_PATTERN
