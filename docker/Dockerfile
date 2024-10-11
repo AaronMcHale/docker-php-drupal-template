@@ -44,9 +44,6 @@ RUN chmod +x /cli-docker-entrypoint.sh
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 COPY --from=composer:2 /docker-entrypoint.sh /usr/local/bin/composer-entrypoint.sh
 
-# Use /tmp for storing Composer Cache files
-ENV COMPOSER_HOME /home/composer
-
 # Add supercronic to this image, using the `hectormolinero/supercronic` image.
 # Supercronic itself does not provide an image we can pull from, so we use
 # `hectormolinero/supercronic` which does the work for us and Docker will
