@@ -25,6 +25,7 @@ x-drupal-base:
     DRUPAL_DB_PORT: "3306"
   tmpfs: [ /tmp ]
   read_only: true
+  security_opt: [ no-new-privileges=true ]
   user: "${ENV_USER_ID?}:${ENV_GROUP_ID?}"
 
 services:
@@ -39,6 +40,7 @@ services:
     depends_on: [ drupal ]
     networks: [ web ]
     read_only: true
+    security_opt: [ no-new-privileges=true ]
     restart: on-failure
 
   drupal:
@@ -123,6 +125,7 @@ services:
     networks: [ db ]
     read_only: true
     restart: on-failure
+    security_opt: [ no-new-privileges=true ]
     volumes:
       - ${DATA_DIR?}/mysql:/var/lib/mysql:rw
     user: "${ENV_USER_ID?}:${ENV_GROUP_ID?}"
