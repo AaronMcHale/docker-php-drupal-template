@@ -1,8 +1,6 @@
 # This is the base docker-compose file which runs across all environments
 # it is supplemented by environment specific compose files.
 
-version: "3.6"
-
 # Define common configuration for Drupal services, each service merges in
 # this configuration.
 x-drupal-base:
